@@ -400,7 +400,7 @@ const ProfilePage = () => {
             <div className="mt-6">
               <button
                 type="button"
-                onClick={() => navigate("/reactions")}
+                onClick={() => navigate("/talent/reactions")}
                 className={`w-full px-8 py-4 rounded-2xl font-black transition-all border shadow-sm flex items-center justify-center gap-3
       ${
         isDark
