@@ -54,9 +54,8 @@ function App() {
 
   return (
     <div
-      className={`min-h-screen transition-colors duration-500 ${
-        settings.darkMode ? "bg-[#121212]" : "bg-[#F8F9FA]"
-      }`}
+      className={`min-h-screen transition-colors duration-500 ${settings.darkMode ? "bg-[#121212]" : "bg-[#F8F9FA]"
+        }`}
     >
       <ToastContainer position="top-right" autoClose={3000} />
       <Toaster position="top-right" />
@@ -64,7 +63,7 @@ function App() {
       <Routes>
         {/* Default home redirects */}
         <Route path="/" element={<Navigate to="/home" replace />} />
-          <Route path="/home" element={<Home />} />
+        <Route path="/home" element={<Home />} />
 
         {/* --- Company Routes --- */}
         <Route element={<Layout />}>
@@ -105,14 +104,14 @@ function App() {
             }
           />
         </Route>
-        
+
         <Route path="/talent/signin" element={<SignInTalent />} />
         <Route path="/talent/registration/step-1" element={<RegistrationForm />} />
         <Route path="/talent/registration/step-2" element={<RegistrationFormStepTwo />} />
         <Route path="/talent/registration/step-3" element={<RegistrationFormStepThree />} />
         <Route path="/talent/verify-account" element={<VerifyAccount />} />
         <Route path="/talent/forgot-password" element={<ForgotPasswordTalent />} />
-        <Route path="/talent/jobs" element={< Jobs/>} />
+        <Route path="/talent/jobs" element={< Jobs />} />
         <Route path="/talent/talents" element={<Talents />} />
 
         <Route element={<ProtectedRoute />}>

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
 import {
   FaUser,
@@ -193,31 +193,28 @@ export default function RegistrationForm() {
               <div
                 className="absolute top-1 bottom-1 left-1 w-[calc(50%-0.5rem)] bg-white rounded-[50px] shadow-md transition-all duration-300"
                 style={{
-                  transform: `translateX(${
-                    activeTab === "company" ? "100%" : "0%"
-                  })`,
+                  transform: `translateX(${activeTab === "company" ? "100%" : "0%"
+                    })`,
                 }}
               ></div>
               <button
                 type="button"
                 onClick={() => setActiveTab("talent")}
-                className={`flex items-center justify-center gap-1 xs:gap-2 px-3 xs:px-4 sm:px-6 py-2 xs:py-3 relative z-10 font-medium text-sm xs:text-base ${
-                  activeTab === "talent" ? "text-[#163D5C]" : "text-gray-400"
-                }`}
+                className={`flex items-center justify-center gap-1 xs:gap-2 px-3 xs:px-4 sm:px-6 py-2 xs:py-3 relative z-10 font-medium text-sm xs:text-base ${activeTab === "talent" ? "text-[#163D5C]" : "text-gray-400"
+                  }`}
               >
                 <FaUser className="text-sm xs:text-base" />
                 <span className="truncate">Talent</span>
               </button>
-              <button
-                type="button"
+              <Link
+                to="/company/signup"
                 onClick={() => setActiveTab("company")}
-                className={`flex items-center justify-center gap-1 xs:gap-2 px-3 xs:px-4 sm:px-6 py-2 xs:py-3 relative z-10 font-medium text-sm xs:text-base ${
-                  activeTab === "company" ? "text-[#163D5C]" : "text-gray-400"
-                }`}
+                className={`flex items-center justify-center gap-1 xs:gap-2 px-3 xs:px-4 sm:px-6 py-2 xs:py-3 relative z-10 font-medium text-sm xs:text-base ${activeTab === "company" ? "text-[#163D5C]" : "text-gray-400"
+                  }`}
               >
                 <FaBuilding className="text-sm xs:text-base" />
                 <span className="truncate">Company</span>
-              </button>
+              </Link>
             </div>
 
             <form
@@ -342,9 +339,8 @@ export default function RegistrationForm() {
                     <div
                       className="absolute top-1 bottom-1 left-1 w-[calc(50%-0.5rem)] bg-white rounded-[50px] shadow-sm transition-all duration-300"
                       style={{
-                        transform: `translateX(${
-                          formData.gender === "female" ? "100%" : "0%"
-                        })`,
+                        transform: `translateX(${formData.gender === "female" ? "100%" : "0%"
+                          })`,
                       }}
                     ></div>
                     <button
@@ -352,11 +348,10 @@ export default function RegistrationForm() {
                       onClick={() =>
                         setFormData({ ...formData, gender: "male" })
                       }
-                      className={`relative z-10 py-1.5 xs:py-2 text-xs xs:text-sm font-medium ${
-                        formData.gender === "male"
+                      className={`relative z-10 py-1.5 xs:py-2 text-xs xs:text-sm font-medium ${formData.gender === "male"
                           ? "text-[#163D5C]"
                           : "text-gray-400"
-                      }`}
+                        }`}
                     >
                       Male
                     </button>
@@ -365,11 +360,10 @@ export default function RegistrationForm() {
                       onClick={() =>
                         setFormData({ ...formData, gender: "female" })
                       }
-                      className={`relative z-10 py-1.5 xs:py-2 text-xs xs:text-sm font-medium ${
-                        formData.gender === "female"
+                      className={`relative z-10 py-1.5 xs:py-2 text-xs xs:text-sm font-medium ${formData.gender === "female"
                           ? "text-[#163D5C]"
                           : "text-gray-400"
-                      }`}
+                        }`}
                     >
                       Female
                     </button>

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { ToastContainer, toast } from "react-toastify";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation, Link } from "react-router-dom";
 import { BiSolidCity } from "react-icons/bi";
 import {
   FaPhoneAlt,
@@ -8,6 +8,8 @@ import {
   FaGlobe,
   FaChevronDown,
   FaSearch,
+  FaUser,
+  FaBuilding,
 } from "react-icons/fa";
 import { PiFlagPennantFill } from "react-icons/pi";
 import PasswordInput from "../common/PasswordInput";
@@ -19,6 +21,7 @@ const SignUpPage = () => {
   const location = useLocation();
   const [isLoading, setIsLoading] = useState(false);
   const [userType, setUserType] = useState("company");
+  const [activeTab, setActiveTab] = useState("talent");
 
   const [formData, setFormData] = useState({
     company_name: "",
@@ -112,20 +115,31 @@ const SignUpPage = () => {
       <ToastContainer />
       <div className="w-full max-w-6xl bg-white rounded-[40px] shadow-2xl p-8 md:p-16 transition-all duration-500">
         {/* User Type Toggle */}
-        <div className="flex bg-gray-100 p-1.5 rounded-2xl mb-12 max-w-sm mx-auto relative z-10">
+        <div className="relative bg-gray-100 rounded-[50px] border border-gray-200 grid grid-cols-2 p-1 mb-6 sm:mb-8 overflow-hidden">
+          <div
+            className="absolute top-1 bottom-1 left-1 w-[calc(50%-0.5rem)] bg-white rounded-[50px] shadow-md transition-all duration-300"
+            style={{
+              transform: `translateX(${activeTab === "talent" ? "100%" : "0%"
+                })`,
+            }}
+          ></div>
+          <Link
+            to="/talent/registration/step-1"
+            onClick={() => setActiveTab("talent")}
+            className={`flex items-center justify-center gap-1 xs:gap-2 px-3 xs:px-4 sm:px-6 py-2 xs:py-3 relative z-10 font-medium text-sm xs:text-base ${activeTab === "talent" ? "text-[#163D5C]" : "text-gray-400"
+              }`}
+          >
+            <FaUser className="text-sm xs:text-base" />
+            <span className="truncate">Talent</span>
+          </Link>
           <button
             type="button"
-            onClick={() => setUserType("talent")}
-            className={`flex-1 py-3 rounded-xl text-sm font-bold transition-all duration-300 z-10 ${userType === "talent" ? "bg-white shadow-md text-black" : "text-gray-400"}`}
+            onClick={() => setActiveTab("company")}
+            className={`flex items-center justify-center gap-1 xs:gap-2 px-3 xs:px-4 sm:px-6 py-2 xs:py-3 relative z-10 font-medium text-sm xs:text-base ${activeTab === "company" ? "text-[#163D5C]" : "text-gray-400"
+              }`}
           >
-            Talent
-          </button>
-          <button
-            type="button"
-            onClick={() => setUserType("company")}
-            className={`flex-1 py-3 rounded-xl text-sm font-bold transition-all duration-300 z-10 ${userType === "company" ? "bg-white shadow-md text-black" : "text-gray-400"}`}
-          >
-            Company
+            <FaBuilding className="text-sm xs:text-base" />
+            <span className="truncate">Company</span>
           </button>
         </div>
 
