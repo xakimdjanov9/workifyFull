@@ -10,8 +10,10 @@ const ForgotPassword2 = () => {
         window.open("https://t.me/Workify1_bot", "_blank");
     };
 
-    const handleBack = () => {
-        navigate('/company/forgot-password-1', { state: { email } });
+    // NEXT tugmasi uchun funksiya
+    const handleGoNext = () => {
+        // Bu yerda hech qanday kod kiritilmagani uchun to'g'ridan-to'g'ri 3-sahifaga o'tamiz
+        navigate('/company/forgot-password-3', { state: { email } });
     };
 
     return (
@@ -31,7 +33,7 @@ const ForgotPassword2 = () => {
                 {/* TELEGRAM BUTTON */}
                 <button
                     onClick={handleOpenBot}
-                    className="bg-[#70cc96] hover:bg-[#5eb683] text-white px-10 py-3 rounded-lg font-bold text-[18px] mb-8 transition-colors duration-300"
+                    className="bg-[#70cc96] hover:bg-[#5eb683] text-white px-10 py-3 rounded-lg font-bold text-[18px] mb-8 transition-colors duration-300 active:scale-95"
                 >
                     Click here!
                 </button>
@@ -45,23 +47,25 @@ const ForgotPassword2 = () => {
                     />
                 </div>
 
-                {/* BUTTON CONTAINER - Back va Next yonma-yon */}
-                <div className="flex flex-col sm:flex-row justify-center items-center gap-4 md:gap-5 mt-5 mb-12">
-
-                    {/* NEXT BUTTON */}
-                    <button
-                        onClick={() => navigate('/company/forgot-password-3', { state: { email } })}
-                        className="w-full sm:w-auto bg-[#1e3a5a] hover:bg-[#152c45] text-white px-14 py-3 rounded-lg font-bold text-[18px] shadow-md active:scale-95 transition-all order-1 sm:order-1"
-                    >
-                        Next
-                    </button>
+                {/* BUTTON CONTAINER - Back chapda, Next o'ngda */}
+                <div className="flex flex-col sm:flex-row justify-center items-center gap-4 md:gap-5 mt-8 mb-12 w-full max-w-[350px] mx-auto">
 
                     {/* BACK BUTTON */}
                     <button
-                        onClick={handleBack}
-                        className="w-full sm:w-auto bg-white border-2 border-[#1e3a5a] text-[#1e3a5a] hover:bg-[#1e3a5a] hover:text-white px-6 py-2.5 rounded-lg text-[16px] font-semibold transition-all min-width-[100px] order-2 sm:order-2"
+                        type="button"
+                        onClick={() => navigate(-1)}
+                        className="w-full sm:flex-1 bg-white border-2 border-[#1e3a5a] text-[#1e3a5a] hover:bg-gray-50 py-4 rounded-xl font-bold text-lg active:scale-95 transition-all order-2 sm:order-1"
                     >
                         Back
+                    </button>
+
+                    {/* NEXT BUTTON */}
+                    <button
+                        type="button"
+                        onClick={handleGoNext}
+                        className="w-full sm:flex-1 bg-[#1e3a5a] hover:bg-[#152c45] text-white py-4 rounded-xl font-bold text-lg shadow-lg shadow-blue-900/10 active:scale-95 transition-all order-1 sm:order-2"
+                    >
+                        Next
                     </button>
 
                 </div>
