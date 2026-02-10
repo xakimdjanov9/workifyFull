@@ -16,6 +16,7 @@ import SignInCompany from "./Company/Login/Login.jsx";
 import ForgotPassword1 from "./Company/ForgotPassword1/ForgotPassword1.jsx";
 import ForgotPassword2 from "./Company/ForgotPassword2/ForgotPassword2.jsx";
 import ForgotPassword3 from "./Company/ForgotPassword3/ForgotPassword3.jsx";
+import ForgotPassword4 from "./Company/ForgotPassword4/ForgotPassword4.jsx";
 import DashboardCompany from "./Company/Dashboard/Dashboard.jsx";
 import TelegramVerify from "./Company/Register/TelegramVerify.jsx";
 import Verify from "./Company/Register/Verify.jsx";
@@ -74,6 +75,7 @@ function App() {
           <Route path="/company/forgot-password-1" element={<ForgotPassword1 />} />
           <Route path="/company/forgot-password-2" element={<ForgotPassword2 />} />
           <Route path="/company/forgot-password-3" element={<ForgotPassword3 />} />
+          <Route path="/company/forgot-password-4" element={<ForgotPassword4 />} />
           <Route path="/jobs" element={<Jobs />} />
           <Route path="/talents" element={<Talents />} />
           <Route path="/roleSelection" element={<RoleSelection />} />

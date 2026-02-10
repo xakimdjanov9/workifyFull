@@ -106,29 +106,35 @@ function Jobs() {
                                     {/* 1. TOP SECTION */}
                                     <div className="p-5 md:p-8">
                                         <div className="flex flex-col md:flex-row justify-between items-start gap-6">
-                                            <div className="flex items-center gap-4 md:gap-5">
-                                                {/* Logo (O'zgarishsiz) */}
-                                                <div className="w-12 h-12 md:w-16 md:h-16 bg-[#00A193] rounded-full flex items-center justify-center overflow-hidden shrink-0 text-white font-bold">
+                                            <div className="flex items-center gap-4 md:gap-6">
+                                                {/* Logo */}
+                                                <div className="w-16 h-16 md:w-24 md:h-24 bg-[#00A193] rounded-full flex items-center justify-center overflow-hidden shrink-0 text-white font-bold">
                                                     {company.profileimg_url ? (
                                                         <img src={company.profileimg_url} alt="logo" className="w-full h-full object-cover" />
                                                     ) : (
-                                                        <span className="text-xl md:text-2xl uppercase">
+                                                        <span className="text-xl md:text-3xl uppercase">
                                                             {company.company_name?.substring(0, 2) || 'TC'}
                                                         </span>
                                                     )}
                                                 </div>
 
                                                 {/* Company details */}
-                                                <div>
-                                                    <h3 className="text-lg md:text-2xl font-bold text-[#3a3a3a] leading-tight">
+                                                <div className="flex flex-col justify-center">
+                                                    <h3 className="text-xl md:text-3xl font-bold text-[#2d3748] leading-tight">
                                                         {company.company_name || 'TechCells'}
                                                     </h3>
-                                                    <p className="text-gray-700 text-[18px] md:text-[26px] font-[400]">
+                                                    <p className="text-gray-600 text-[16px] md:text-[22px] font-medium">
                                                         {company.industry || 'Computer Software'}
                                                     </p>
-                                                    <div className="flex items-center gap-1 mt-1">
-                                                        <div className="flex text-yellow-400 text-[20px] md:text-[30px] tracking-tighter transform md:-translate-y-3 -translate-y-1">★★★★<span className="text-gray-300">★</span></div>
-                                                        <span className="text-gray-500 text-[12px] md:text-[15px] font-semibold ml-1 transform md:-translate-y-2 -translate-y-0.5">(4.0) 1K reviews</span>
+
+                                                    {/* Ratings - translate klasslari olib tashlandi */}
+                                                    <div className="flex items-center gap-2 mt-1">
+                                                        <div className="flex text-yellow-400 text-xl md:text-3xl">
+                                                            ★★★★<span className="text-gray-300">★</span>
+                                                        </div>
+                                                        <span className="text-gray-500 text-sm md:text-lg font-medium border-l border-gray-300 pl-2 ml-1">
+                                                            (4.0) | 1K reviews
+                                                        </span>
                                                     </div>
                                                 </div>
                                             </div>
