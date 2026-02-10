@@ -29,11 +29,11 @@ function Header() {
         // Tokenni dekod qilish
         const decodedToken = jwtDecode(token);
         console.log("Decoded token:", decodedToken);
-        
+
         // Tokendan rolni aniqlash
         const role = decodedToken.role || decodedToken.role_id;
         setUserRole(role);
-        
+
         // Agar userInfo mavjud bo'lsa, undan foydalanish
         if (userInfo) {
           const parsedUser = JSON.parse(userInfo);
@@ -68,13 +68,13 @@ function Header() {
   // Foydalanuvchi nomini olish funksiyasi
   const getUserDisplayName = () => {
     if (!user) return '';
-    
+
     if (userRole === 'company' || userRole === 'employer') {
       return user.company_name || user.email || 'Company';
     } else if (userRole === 'talent' || userRole === 'job_seeker') {
       return user.name || user.full_name || user.email || 'Talent';
     }
-    
+
     return user.email || 'User';
   };
 
@@ -209,7 +209,7 @@ function Header() {
                   Sign in
                 </Link>
                 <Link
-                  to="/roleSelection"
+                  to="/company/signup"
                   className="flex px-6 py-2.5 text-[16px] items-center justify-center bg-[#163D5C] border-2 border-[#163D5C] rounded-xl font-bold text-white hover:bg-white hover:text-[#163D5C] transition-all shadow-md"
                 >
                   Join Now
@@ -272,17 +272,17 @@ function Header() {
               <MobileNavLink to="/jobs" icon={<IoWalletOutline size={24} />} label="Jobs" onClick={() => setIsOpen(false)} />
               {user && (
                 <>
-                  <MobileNavLink 
-                    to={getDashboardLink()} 
-                    icon={<MdDashboard size={24} />} 
-                    label="Dashboard" 
-                    onClick={() => setIsOpen(false)} 
+                  <MobileNavLink
+                    to={getDashboardLink()}
+                    icon={<MdDashboard size={24} />}
+                    label="Dashboard"
+                    onClick={() => setIsOpen(false)}
                   />
-                  <MobileNavLink 
-                    to={getProfileLink()} 
-                    icon={<IoMdPerson size={24} />} 
-                    label="My Profile" 
-                    onClick={() => setIsOpen(false)} 
+                  <MobileNavLink
+                    to={getProfileLink()}
+                    icon={<IoMdPerson size={24} />}
+                    label="My Profile"
+                    onClick={() => setIsOpen(false)}
                   />
                 </>
               )}
