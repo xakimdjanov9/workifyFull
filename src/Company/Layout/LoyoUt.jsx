@@ -11,8 +11,9 @@ const Layout = () => {
   const dashboardPaths = [
     "/company/dashboard",
     "/company/my-company",
-    "/faq",
-    "/contacts",
+    "/company/talents",
+    "/company/faq",
+    "/company/contacts",
     "/company/my-jobs",
     "/company/settings"
   ];

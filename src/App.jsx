@@ -105,6 +105,38 @@ function App() {
               </ProtectedRoute>
             }
           />
+          <Route
+            path="/company/talents"
+            element={
+              <ProtectedRoute>
+                <div>Talents</div>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/company/faq"
+            element={
+              <ProtectedRoute>
+                <Faq />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/company/contacts"
+            element={
+              <ProtectedRoute>
+                <Contact />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/company/settings"
+            element={
+              <ProtectedRoute>
+                <Setting />
+              </ProtectedRoute>
+            }
+          />
         </Route>
 
         <Route path="/talent/signin" element={<SignInTalent />} />
