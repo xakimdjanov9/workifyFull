@@ -155,7 +155,7 @@ export const UZBEK_REGIONS = [
 
 export const sendResetCode = async (email) => {
   const response = await api.post("/company/send-reset-code", {
-    email: email.trim().toLowerCase()
+    email: email.trim().toLowerCase(),
   });
   return response.data;
 };
@@ -163,7 +163,7 @@ export const sendResetCode = async (email) => {
 export const checkResetCode = async (email, code) => {
   const response = await api.post("/company/check-reset-code", {
     email: email.trim().toLowerCase(),
-    code: String(code).trim() // Kodni string ko'rinishida yuborish
+    code: String(code).trim(), // Kodni string ko'rinishida yuborish
   });
   return response.data;
 };
@@ -173,7 +173,7 @@ export const confirmResetPassword = async (email, code, newPassword) => {
   return await api.post("/company/confirm-reset-password", {
     email: email.trim(),
     code: String(code).trim(), // Ba'zi backendlar string kutadi
-    newPassword: newPassword,   // Agar new_password bo'lmasa, buni ishlating
+    newPassword: newPassword, // Agar new_password bo'lmasa, buni ishlating
     // new_password: newPassword // Agar backendda snake_case bo'lsa, buni oching
   });
 };
