@@ -126,19 +126,34 @@ export default function JobDetail() {
         >
           <div className="flex flex-col md:flex-row justify-between items-start gap-4 mb-6">
             <div className="flex gap-5">
-              <div
-                className={`w-16 h-16 rounded-2xl flex items-center justify-center p-2 border ${
-                  isDark
-                    ? "bg-[#252525] border-gray-700"
-                    : "bg-white border-gray-100"
-                }`}
-              >
-                <img
-                  src={job.company?.profileimg_url || nonImg}
-                  alt="logo"
-                  className="w-full h-full object-contain"
-                />
+              {/* ✅ UPDATED LOGO (DUMALOQ + PREMIUM) */}
+              <div className="relative group shrink-0">
+                <div
+                  className={`w-16 h-16 rounded-full overflow-hidden flex items-center justify-center transition-all duration-300
+                    ${
+                      isDark
+                        ? "bg-gradient-to-br from-[#2a2a2a] to-[#1a1a1a] border border-gray-700 shadow-lg shadow-black/40"
+                        : "bg-white border border-gray-200 shadow-md"
+                    }
+                    group-hover:scale-105 group-hover:shadow-xl`}
+                >
+                  {job.company?.profileimg_url ? (
+                    <img
+                      src={job.company.profileimg_url}
+                      alt="logo"
+                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                    />
+                  ) : (
+                    <span className="text-lg font-bold text-blue-500">
+                      {job.company?.company_name?.charAt(0) || "C"}
+                    </span>
+                  )}
+                </div>
+
+                {/* subtle ring */}
+                <div className="absolute inset-0 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-300 ring-2 ring-blue-400/30"></div>
               </div>
+
               <div>
                 <h1
                   className={`text-2xl font-black ${
@@ -160,16 +175,21 @@ export default function JobDetail() {
                 </div>
               </div>
             </div>
+
+            {/* ✅ SALARY MIN + MAX */}
             <div className="md:text-right">
               <span
                 className={`text-2xl font-black ${
                   isDark ? "text-blue-400" : "text-slate-800"
                 }`}
               >
-                ${job.salary_max}.00
+                {job.salary_min === job.salary_max
+                  ? `$${job.salary_min?.toLocaleString()}`
+                  : `$${job.salary_min?.toLocaleString()} – $${job.salary_max?.toLocaleString()}`}
               </span>
             </div>
           </div>
+
           <p
             className={`text-sm leading-relaxed ${
               isDark ? "text-gray-400" : "text-gray-500"
@@ -208,8 +228,7 @@ export default function JobDetail() {
               }`}
             >
               Drag and drop or{" "}
-              <span className="text-blue-500 underline">Browse</span> resume
-              file
+              <span className="text-blue-500 underline">Browse</span> resume file
             </p>
           </div>
 
