@@ -106,17 +106,34 @@ export default function JobDetail() {
         >
           <div className="flex flex-col md:flex-row justify-between items-start gap-4 mb-8">
             <div className="flex gap-5">
-              <div
-                className={`w-16 h-16 rounded-2xl flex items-center justify-center p-2 shadow-sm shrink-0 ${
-                  isDark ? "bg-[#006666]" : "bg-[#008B8B]"
-                }`}
-              >
-                <img
-                  src={job.company?.profileimg_url || "/default-company.png"}
-                  alt="logo"
-                  className="w-full h-full object-contain brightness-0 invert"
-                />
+              {/* ✅ UPDATED LOGO (HEADER SECTION) */}
+              <div className="relative group shrink-0">
+                <div
+                  className={`w-16 h-16 rounded-full overflow-hidden flex items-center justify-center transition-all duration-300
+                    ${
+                      isDark
+                        ? "bg-gradient-to-br from-[#2a2a2a] to-[#1a1a1a] border border-gray-700 shadow-lg shadow-black/40"
+                        : "bg-white border border-gray-200 shadow-md"
+                    }
+                    group-hover:scale-105`}
+                >
+                  {job.company?.profileimg_url ? (
+                    <img
+                      src={job.company.profileimg_url}
+                      alt="company logo"
+                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                    />
+                  ) : (
+                    <span className="text-lg font-bold text-blue-500">
+                      {job.company?.company_name?.charAt(0) || "C"}
+                    </span>
+                  )}
+                </div>
+
+                {/* soft ring hover */}
+                <div className="absolute inset-0 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-300 ring-2 ring-blue-400/30"></div>
               </div>
+
               <div>
                 <h1
                   className={`text-2xl font-black tracking-tight ${
@@ -137,6 +154,7 @@ export default function JobDetail() {
                 </p>
               </div>
             </div>
+
             <div className="md:text-right w-full md:w-auto">
               <p className="text-gray-500 text-xs font-bold mb-1">
                 Posted {new Date(job.createdAt).toLocaleDateString()}
@@ -194,11 +212,14 @@ export default function JobDetail() {
           <div className="flex justify-center mt-12">
             <button
               onClick={() => navigate(`/talent/job-post/${job.id}`)}
-              className={`px-20 md:px-32 py-4 text-white font-black rounded-2xl transition-all transform active:scale-95 shadow-lg ${
-                isDark
-                  ? "bg-blue-600 hover:bg-blue-700 shadow-blue-900/20"
-                  : "bg-[#52D394] hover:bg-[#46b881] shadow-green-100"
-              }`}
+              className={`px-20 md:px-32 py-4 text-white font-black rounded-2xl transition-all transform active:scale-95 shadow-lg
+                focus:outline-none focus-visible:outline-none active:outline-none
+                focus:ring-0 focus-visible:ring-0 active:ring-0
+                ${
+                  isDark
+                    ? "bg-blue-600 hover:bg-blue-700 shadow-blue-900/20"
+                    : "bg-[#52D394] hover:bg-[#46b881] shadow-green-100"
+                }`}
             >
               Apply Now
             </button>
@@ -220,17 +241,31 @@ export default function JobDetail() {
 
           <div className="flex flex-col lg:flex-row items-center justify-between gap-8">
             <div className="flex gap-4 w-full lg:w-auto">
-              <div
-                className={`w-14 h-14 rounded-2xl flex items-center justify-center p-2 shrink-0 ${
-                  isDark ? "bg-[#006666]" : "bg-[#008B8B]"
-                }`}
-              >
-                <img
-                  src={job.company?.profileimg_url || "/default-company.png"}
-                  alt="logo"
-                  className="w-full h-full object-contain brightness-0 invert"
-                />
+              {/* ✅ UPDATED LOGO (ABOUT COMPANY SECTION) */}
+              <div className="relative group shrink-0">
+                <div
+                  className={`w-14 h-14 rounded-full overflow-hidden flex items-center justify-center transition-all duration-300
+                    ${
+                      isDark
+                        ? "bg-gradient-to-br from-[#2a2a2a] to-[#1a1a1a] border border-gray-700 shadow-md"
+                        : "bg-white border border-gray-200 shadow-sm"
+                    }
+                    group-hover:scale-105`}
+                >
+                  {job.company?.profileimg_url ? (
+                    <img
+                      src={job.company.profileimg_url}
+                      alt="company logo"
+                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                    />
+                  ) : (
+                    <span className="text-sm font-bold text-blue-500">
+                      {job.company?.company_name?.charAt(0) || "C"}
+                    </span>
+                  )}
+                </div>
               </div>
+
               <div className="overflow-hidden">
                 <h4
                   className={`text-md font-black truncate ${
@@ -265,11 +300,13 @@ export default function JobDetail() {
                   Active jobs
                 </p>
               </div>
+
               <div
                 className={`hidden md:block h-8 w-[1px] ${
                   isDark ? "bg-gray-800" : "bg-gray-100"
                 }`}
               ></div>
+
               <div className="min-w-[80px]">
                 <p
                   className={`text-xl md:text-2xl font-black ${
@@ -282,11 +319,13 @@ export default function JobDetail() {
                   Jobs posted
                 </p>
               </div>
+
               <div
                 className={`hidden md:block h-8 w-[1px] ${
                   isDark ? "bg-gray-800" : "bg-gray-100"
                 }`}
               ></div>
+
               <div className="min-w-[80px]">
                 <p
                   className={`text-xl md:text-2xl font-black ${

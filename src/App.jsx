@@ -66,16 +66,75 @@ function App() {
 
         {/* 1. COMPANY SECTION - Faqat Sidebarli sahifalar */}
         <Route element={<Layout />}>
-          {/* Dashboard va My Jobs kabi sahifalar - bular sidebar ichida ochiladi */}
-          <Route element={<ProtectedRoute />}>
-            <Route path="/company/dashboard" element={<DashboardCompany />} />
-            <Route path="/company/my-company" element={<MyCompany />} />
-            <Route path="/company/my-jobs" element={<MyJobs />} />
-            {/* BU MUHIM: job-detail ni aynan shu yerga qo'ydim, sidebarrefresh bo'lmaydi */}
-            <Route path="/company/job-detail/:id" element={<JobDetailPageCompany />} />
-            <Route path="/jobs" element={<Jobs />} />
-            <Route path="/talents" element={<Talents />} />
-          </Route>
+          <Route path="/company/signin" element={<SignInCompany />} />
+          <Route path="/company/signup" element={<SignUpPage />} />
+          <Route path="/company/signup/telegram" element={<TelegramVerify />} />
+          <Route path="/company/signup/verify" element={<Verify />} />
+          <Route path="/company/forgot-password-1" element={<ForgotPassword1 />} />
+          <Route path="/company/forgot-password-2" element={<ForgotPassword2 />} />
+          <Route path="/company/forgot-password-3" element={<ForgotPassword3 />} />
+          <Route path="/company/forgot-password-4" element={<ForgotPassword4 />} />
+          <Route path="/jobs" element={<Jobs />} />
+          <Route path="/talents" element={<Talents />} />
+          <Route path="/roleSelection" element={<RoleSelection />} />
+
+          <Route
+            path="/company/dashboard"
+            element={
+              <ProtectedRoute>
+                <DashboardCompany />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/company/my-company"
+            element={
+              <ProtectedRoute>
+                <MyCompany />
+              </ProtectedRoute>
+            }
+          />
+          {/* Optional Company protected pages */}
+          <Route
+            path="/company/my-jobs"
+            element={
+              <ProtectedRoute>
+                <div>My Jobs</div>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/company/talents"
+            element={
+              <ProtectedRoute>
+                <div>Talents</div>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/company/faq"
+            element={
+              <ProtectedRoute>
+                <Faq />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/company/contacts"
+            element={
+              <ProtectedRoute>
+                <Contact />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/company/settings"
+            element={
+              <ProtectedRoute>
+                <Setting />
+              </ProtectedRoute>
+            }
+          />
         </Route>
 
         {/* 2. AUTH SECTION - Bular sidebarsiz chiqadi */}
