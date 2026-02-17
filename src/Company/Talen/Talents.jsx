@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { HiOutlineBriefcase } from "react-icons/hi";
 import { PiMonitorBold } from "react-icons/pi";
@@ -159,9 +159,9 @@ const Talents = () => {
       <div className="max-w-[1240px] mx-auto">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6 md:mb-10">
           <h1 className="text-[28px] md:text-[32px] font-black">Talents</h1>
-          <button className="w-full md:w-auto bg-[#50C594] text-white px-8 py-3 rounded-[15px] font-bold text-[18px] shadow-sm hover:bg-[#45b385] transition-colors">
+          <Link to="/company/post-job" className="w-full md:w-auto bg-[#50C594] text-white px-8 py-3 rounded-[15px] font-bold text-[18px] shadow-sm hover:bg-[#45b385] transition-colors">
             Post a Job
-          </button>
+          </Link>
         </div>
 
         {/* Filter Card */}
