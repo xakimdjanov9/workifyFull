@@ -23,6 +23,7 @@ import Verify from "./Company/Register/Verify.jsx";
 import MyCompany from "./Company/MyCompany/MyCompany.jsx";
 import MyJobs from "./Company/MyJobs/MyJobs.jsx";
 import JobDetailPageCompany from "./Company/JobDetail/JobDetailPage.jsx";
+import PostJob from "./Company/PostJob/PostJob.jsx";
 
 // --- Talent Pages ---
 import MainLayout from "./talent/components/MainLayout.jsx";
@@ -53,7 +54,7 @@ const ProtectedRoute = ({ children }) => {
 };
 
 function App() {
-    const { settings } = useTheme();
+  const { settings } = useTheme();
 
   return (
     <div className={`min-h-screen transition-colors duration-500 ${settings.darkMode ? "bg-[#121212]" : "bg-[#F8F9FA]"}`}>
@@ -99,7 +100,7 @@ function App() {
             path="/company/my-jobs"
             element={
               <ProtectedRoute>
-               <MyJobs />
+                <MyJobs />
               </ProtectedRoute>
             }
           />
@@ -107,7 +108,7 @@ function App() {
             path="/company/job-detail/:id"
             element={
               <ProtectedRoute>
-               <JobDetailPageCompany />
+                <JobDetailPageCompany />
               </ProtectedRoute>
             }
           />
@@ -140,6 +141,14 @@ function App() {
             element={
               <ProtectedRoute>
                 <Setting />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/company/post-job"
+            element={
+              <ProtectedRoute>
+                <PostJob />
               </ProtectedRoute>
             }
           />

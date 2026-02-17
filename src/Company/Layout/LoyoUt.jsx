@@ -11,7 +11,7 @@ const Layout = () => {
 
   const dashboardPaths = [
     "/company/dashboard", "/company/my-company", "/company/talents",
-    "/company/faq", "/company/contacts", "/company/my-jobs", "/company/job-detail", "/company/settings"
+    "/company/faq", "/company/contacts", "/company/my-jobs", "/company/job-detail", "/company/settings", "/company/post-job"
   ];
 
   const isDashboard = dashboardPaths.some(path => location.pathname.startsWith(path));

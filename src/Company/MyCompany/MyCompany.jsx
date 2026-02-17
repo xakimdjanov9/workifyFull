@@ -6,6 +6,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { Country, City } from 'country-state-city';
 import { useTheme } from "../../talent/Context/ThemeContext";
+import { Link } from 'react-router-dom';
 
 export const INDUSTRIES = ["Technology", "Finance", "Healthcare", "Education", "Manufacturing", "Other"];
 
@@ -175,7 +176,7 @@ const MyCompany = () => {
           <h1 className={`text-xl sm:text-2xl font-bold px-6 py-4 rounded-2xl shadow-sm w-full md:flex-1 text-center md:text-left border transition-colors ${isDark ? 'bg-[#1E1E1E] text-white border-gray-800' : 'bg-white text-[#4B5563] border-gray-100'}`}>
             Company profile
           </h1>
-          <button className="bg-[#5CB85C] hover:bg-[#4cae4c] text-white w-full md:w-auto px-10 py-4 rounded-2xl font-bold shadow-md active:scale-95 transition-all">Post a Job</button>
+          <Link to="/company/post-job" className="bg-[#5CB85C] hover:bg-[#4cae4c] text-white w-full md:w-auto px-10 py-4 rounded-2xl font-bold shadow-md active:scale-95 transition-all">Post a Job</Link>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-[320px_1fr] xl:grid-cols-[380px_1fr] gap-8">
