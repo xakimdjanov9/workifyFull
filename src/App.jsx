@@ -47,144 +47,144 @@ import RoleSelection from "./Company/RoleSelect/RoleSelect.jsx";
 
 // --- ProtectedRoute ---
 const ProtectedRoute = ({ children }) => {
-    const token = localStorage.getItem("token") || sessionStorage.getItem("token");
-    if (!token) return <Navigate to="/company/signin" replace />;
-    return children ? children : <Outlet />;
+  const token = localStorage.getItem("token") || sessionStorage.getItem("token");
+  if (!token) return <Navigate to="/company/signin" replace />;
+  return children ? children : <Outlet />;
 };
 
 function App() {
     const { settings } = useTheme();
 
-    return (
-        <div className={`min-h-screen transition-colors duration-500 ${settings.darkMode ? "bg-[#121212]" : "bg-[#F8F9FA]"}`}>
-            <ToastContainer position="top-right" autoClose={3000} />
-            <Toaster position="top-right" />
+  return (
+    <div className={`min-h-screen transition-colors duration-500 ${settings.darkMode ? "bg-[#121212]" : "bg-[#F8F9FA]"}`}>
+      <ToastContainer position="top-right" autoClose={3000} />
+      <Toaster position="top-right" />
 
-            <Routes>
-                <Route path="/" element={<Navigate to="/home" replace />} />
-                <Route path="/home" element={<Home />} />
+      <Routes>
+        <Route path="/" element={<Navigate to="/home" replace />} />
+        <Route path="/home" element={<Home />} />
 
-                {/* 1. COMPANY SECTION - Faqat Sidebarli sahifalar */}
-                <Route element={<Layout />}>
-                    <Route path="/company/signin" element={<SignInCompany />} />
-                    <Route path="/company/signup" element={<SignUpPage />} />
-                    <Route path="/company/signup/telegram" element={<TelegramVerify />} />
-                    <Route path="/company/signup/verify" element={<Verify />} />
-                    <Route path="/company/forgot-password-1" element={<ForgotPassword1 />} />
-                    <Route path="/company/forgot-password-2" element={<ForgotPassword2 />} />
-                    <Route path="/company/forgot-password-3" element={<ForgotPassword3 />} />
-                    <Route path="/company/forgot-password-4" element={<ForgotPassword4 />} />
-                    <Route path="/jobs" element={<Jobs />} />
-                    <Route path="/talents" element={<Talents />} />
-                    <Route path="/roleSelection" element={<RoleSelection />} />
+        {/* 1. COMPANY SECTION - Faqat Sidebarli sahifalar */}
+        <Route element={<Layout />}>
+          <Route path="/company/signin" element={<SignInCompany />} />
+          <Route path="/company/signup" element={<SignUpPage />} />
+          <Route path="/company/signup/telegram" element={<TelegramVerify />} />
+          <Route path="/company/signup/verify" element={<Verify />} />
+          <Route path="/company/forgot-password-1" element={<ForgotPassword1 />} />
+          <Route path="/company/forgot-password-2" element={<ForgotPassword2 />} />
+          <Route path="/company/forgot-password-3" element={<ForgotPassword3 />} />
+          <Route path="/company/forgot-password-4" element={<ForgotPassword4 />} />
+          <Route path="/jobs" element={<Jobs />} />
+          <Route path="/talents" element={<Talents />} />
+          <Route path="/roleSelection" element={<RoleSelection />} />
 
-                    <Route
-                        path="/company/dashboard"
-                        element={
-                            <ProtectedRoute>
-                                <DashboardCompany />
-                            </ProtectedRoute>
-                        }
-                    />
-                    <Route
-                        path="/company/my-company"
-                        element={
-                            <ProtectedRoute>
-                                <MyCompany />
-                            </ProtectedRoute>
-                        }
-                    />
-                    {/* Optional Company protected pages */}
-                    <Route
-                        path="/company/my-jobs"
-                        element={
-                            <ProtectedRoute>
-                                <MyJobs />
-                            </ProtectedRoute>
-                        }
-                    />
-                    <Route
-                        path="/company/job-detail/:id"
-                        element={
-                            <ProtectedRoute>
-                                <JobDetailPageCompany />
-                            </ProtectedRoute>
-                        }
-                    />
-                    <Route
-                        path="/company/talents"
-                        element={
-                            <ProtectedRoute>
-                                <div>Talents</div>
-                            </ProtectedRoute>
-                        }
-                    />
-                    <Route
-                        path="/company/faq"
-                        element={
-                            <ProtectedRoute>
-                                <Faq />
-                            </ProtectedRoute>
-                        }
-                    />
-                    <Route
-                        path="/company/contacts"
-                        element={
-                            <ProtectedRoute>
-                                <Contact />
-                            </ProtectedRoute>
-                        }
-                    />
-                    <Route
-                        path="/company/settings"
-                        element={
-                            <ProtectedRoute>
-                                <Setting />
-                            </ProtectedRoute>
-                        }
-                    />
-                </Route>
+          <Route
+            path="/company/dashboard"
+            element={
+              <ProtectedRoute>
+                <DashboardCompany />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/company/my-company"
+            element={
+              <ProtectedRoute>
+                <MyCompany />
+              </ProtectedRoute>
+            }
+          />
+          {/* Optional Company protected pages */}
+          <Route
+            path="/company/my-jobs"
+            element={
+              <ProtectedRoute>
+               <MyJobs />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/company/job-detail/:id"
+            element={
+              <ProtectedRoute>
+               <JobDetailPageCompany />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/company/talents"
+            element={
+              <ProtectedRoute>
+                <div>Talents</div>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/company/faq"
+            element={
+              <ProtectedRoute>
+                <Faq />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/company/contacts"
+            element={
+              <ProtectedRoute>
+                <Contact />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/company/settings"
+            element={
+              <ProtectedRoute>
+                <Setting />
+              </ProtectedRoute>
+            }
+          />
+        </Route>
 
-                {/* 2. AUTH SECTION - Bular sidebarsiz chiqadi */}
-                <Route path="/company/signin" element={<SignInCompany />} />
-                <Route path="/company/signup" element={<SignUpPage />} />
-                <Route path="/company/signup/telegram" element={<TelegramVerify />} />
-                <Route path="/company/signup/verify" element={<Verify />} />
-                <Route path="/company/forgot-password-1" element={<ForgotPassword1 />} />
-                <Route path="/company/forgot-password-2" element={<ForgotPassword2 />} />
-                <Route path="/company/forgot-password-3" element={<ForgotPassword3 />} />
-                <Route path="/company/forgot-password-4" element={<ForgotPassword4 />} />
-                <Route path="/roleSelection" element={<RoleSelection />} />
+        {/* 2. AUTH SECTION - Bular sidebarsiz chiqadi */}
+        <Route path="/company/signin" element={<SignInCompany />} />
+        <Route path="/company/signup" element={<SignUpPage />} />
+        <Route path="/company/signup/telegram" element={<TelegramVerify />} />
+        <Route path="/company/signup/verify" element={<Verify />} />
+        <Route path="/company/forgot-password-1" element={<ForgotPassword1 />} />
+        <Route path="/company/forgot-password-2" element={<ForgotPassword2 />} />
+        <Route path="/company/forgot-password-3" element={<ForgotPassword3 />} />
+        <Route path="/company/forgot-password-4" element={<ForgotPassword4 />} />
+        <Route path="/roleSelection" element={<RoleSelection />} />
 
-                {/* 3. TALENT SECTION - Talent Headeri bilan */}
-                <Route path="/talent/signin" element={<SignInTalent />} />
-                <Route path="/talent/registration/step-1" element={<RegistrationForm />} />
-                <Route path="/talent/registration/step-2" element={<RegistrationFormStepTwo />} />
-                <Route path="/talent/registration/step-3" element={<RegistrationFormStepThree />} />
-                <Route path="/talent/verify-account" element={<VerifyAccount />} />
-                <Route path="/talent/forgot-password" element={<ForgotPasswordTalent />} />
+        {/* 3. TALENT SECTION - Talent Headeri bilan */}
+        <Route path="/talent/signin" element={<SignInTalent />} />
+        <Route path="/talent/registration/step-1" element={<RegistrationForm />} />
+        <Route path="/talent/registration/step-2" element={<RegistrationFormStepTwo />} />
+        <Route path="/talent/registration/step-3" element={<RegistrationFormStepThree />} />
+        <Route path="/talent/verify-account" element={<VerifyAccount />} />
+        <Route path="/talent/forgot-password" element={<ForgotPasswordTalent />} />
 
-                <Route element={<ProtectedRoute />}>
-                    <Route element={<MainLayout />}>
-                        <Route path="/talent/dashboard" element={<DashboardTalent />} />
-                        <Route path="/talent/profile" element={<ProfilePage />} />
-                        <Route path="/talent/alerts" element={<JobAlerts />} />
-                        <Route path="/talent/matches" element={<JobMatches />} />
-                        {/* Talent sahifalarini ajratib qo'ydik */}
-                        <Route path="/talent/job-post/:id" element={<JobDetail />} />
-                        <Route path="/talent/job-details/:id" element={<CompanyDetail />} />
-                        <Route path="/talent/congratulations" element={<Congratulations />} />
-                        <Route path="/talent/settings" element={<Setting />} />
-                        <Route path="/talent/faq" element={<Faq />} />
-                        <Route path="/talent/contacts" element={<Contact />} />
-                        <Route path="/talent/reactions" element={<Reactions />} />
-                    </Route>
-                </Route>
+        <Route element={<ProtectedRoute />}>
+          <Route element={<MainLayout />}>
+            <Route path="/talent/dashboard" element={<DashboardTalent />} />
+            <Route path="/talent/profile" element={<ProfilePage />} />
+            <Route path="/talent/alerts" element={<JobAlerts />} />
+            <Route path="/talent/matches" element={<JobMatches />} />
+            {/* Talent sahifalarini ajratib qo'ydik */}
+            <Route path="/talent/job-post/:id" element={<JobDetail />} />
+            <Route path="/talent/job-details/:id" element={<CompanyDetail />} />
+            <Route path="/talent/congratulations" element={<Congratulations />} />
+            <Route path="/talent/settings" element={<Setting />} />
+            <Route path="/talent/faq" element={<Faq />} />
+            <Route path="/talent/contacts" element={<Contact />} />
+            <Route path="/talent/reactions" element={<Reactions />} />
+          </Route>
+        </Route>
 
-                <Route path="*" element={<Navigate to="/" replace />} />
-            </Routes>
-        </div>
-    );
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
+    </div>
+  );
 }
 
 export default App;

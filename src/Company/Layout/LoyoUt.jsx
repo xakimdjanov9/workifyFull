@@ -3,39 +3,38 @@ import { useLocation, Outlet } from "react-router-dom";
 import Header from "../Header/Header";
 import Footer from "../Footer/Footer";
 import Sidebar from "../Sidebar/Sidebar";
+import { useTheme } from "../../talent/Context/ThemeContext";
 
 const Layout = () => {
+  const { settings } = useTheme();
   const location = useLocation();
 
-  // Dashboard qismiga kiruvchi barcha yo'llar ro'yxati
   const dashboardPaths = [
-    "/company/dashboard",
-    "/company/my-company",
-    "/company/talents",
-    "/company/faq",
-    "/company/contacts",
-    "/company/my-jobs",
-    "/company/settings"
+    "/company/dashboard", "/company/my-company", "/company/talents",
+    "/company/faq", "/company/contacts", "/company/my-jobs", "/company/job-detail", "/company/settings"
   ];
 
-  // Hozirgi yo'l dashboard'ga tegishlimi yoki yo'qmi tekshiramiz
   const isDashboard = dashboardPaths.some(path => location.pathname.startsWith(path));
 
+  // Dark mode holatiga qarab ranglar
+  const bgColor = settings.darkMode ? "bg-[#121212]" : "bg-[#F8F9FA]";
+  const textColor = settings.darkMode ? "text-white" : "text-black";
+
   return (
-    <div className="min-h-screen bg-[#F8F9FA]">
+    <div className={`min-h-screen transition-all duration-300 ${bgColor} ${textColor}`}>
       {isDashboard ? (
-        /* --- DASHBOARD REJIMI (Faqat Sidebar) --- */
-        // Layout.js ichidagi o'zgarish
-        <div className="flex flex-col md:flex-row h-screen overflow-hidden">
-          <aside className="order-2 md:order-1 w-full md:w-[300px] h-auto md:h-full shrink-0">
+        <div className="flex flex-col md:flex-row min-h-screen">
+          <aside className="md:sticky md:top-0 md:h-screen shrink-0 z-50 order-2 md:order-1">
             <Sidebar />
           </aside>
-          <main className="order-1 md:order-2 flex-1 overflow-y-auto p-4 lg:p-10 pb-[100px] md:pb-10">
-            <Outlet />
+          <main className="flex-1 min-w-0 overflow-y-auto order-1 md:order-2 p-4 md:p-6 lg:p-10">
+            {/* Sahifalar uchun maxsus wrapper */}
+            <div className="max-w-[1400px] mx-auto">
+              <Outlet />
+            </div>
           </main>
         </div>
       ) : (
-        /* --- ODDIY REJIM (Header + Content + Footer) --- */
         <div className="flex flex-col min-h-screen">
           <Header />
           <main className="flex-grow">
