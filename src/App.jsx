@@ -21,6 +21,8 @@ import DashboardCompany from "./Company/Dashboard/Dashboard.jsx";
 import TelegramVerify from "./Company/Register/TelegramVerify.jsx";
 import Verify from "./Company/Register/Verify.jsx";
 import MyCompany from "./Company/MyCompany/MyCompany.jsx";
+import MyJobs from "./Company/MyJobs/MyJobs.jsx";
+import JobDetailPageCompany from "./Company/JobDetail/JobDetailPage.jsx";
 
 // --- Talent Pages ---
 import MainLayout from "./talent/components/MainLayout.jsx";
@@ -45,7 +47,7 @@ import RoleSelection from "./Company/RoleSelect/RoleSelect.jsx";
 import Talent from "./Company/Talen/Talents.jsx";
 import TalentDetail from "./Company/Talen/TalentDetail.jsx";
 
-// --- ProtectedRoute for both ---
+// --- ProtectedRoute ---
 const ProtectedRoute = ({ children }) => {
   const token =
     localStorage.getItem("token") || sessionStorage.getItem("token");
@@ -66,11 +68,10 @@ function App() {
       <Toaster position="top-right" />
 
       <Routes>
-        {/* Default home redirects */}
         <Route path="/" element={<Navigate to="/home" replace />} />
         <Route path="/home" element={<Home />} />
 
-        {/* --- Company Routes --- */}
+        {/* 1. COMPANY SECTION - Faqat Sidebarli sahifalar */}
         <Route element={<Layout />}>
           <Route path="/company/signin" element={<SignInCompany />} />
           <Route path="/company/signup" element={<SignUpPage />} />
@@ -117,7 +118,15 @@ function App() {
             path="/company/my-jobs"
             element={
               <ProtectedRoute>
-                <div>My Jobs</div>
+               <MyJobs />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/company/job-detail/:id"
+            element={
+              <ProtectedRoute>
+               <JobDetailPageCompany />
               </ProtectedRoute>
             }
           />
@@ -156,6 +165,18 @@ function App() {
           />
         </Route>
 
+        {/* 2. AUTH SECTION - Bular sidebarsiz chiqadi */}
+        <Route path="/company/signin" element={<SignInCompany />} />
+        <Route path="/company/signup" element={<SignUpPage />} />
+        <Route path="/company/signup/telegram" element={<TelegramVerify />} />
+        <Route path="/company/signup/verify" element={<Verify />} />
+        <Route path="/company/forgot-password-1" element={<ForgotPassword1 />} />
+        <Route path="/company/forgot-password-2" element={<ForgotPassword2 />} />
+        <Route path="/company/forgot-password-3" element={<ForgotPassword3 />} />
+        <Route path="/company/forgot-password-4" element={<ForgotPassword4 />} />
+        <Route path="/roleSelection" element={<RoleSelection />} />
+
+        {/* 3. TALENT SECTION - Talent Headeri bilan */}
         <Route path="/talent/signin" element={<SignInTalent />} />
         <Route
           path="/talent/registration/step-1"
@@ -183,6 +204,7 @@ function App() {
             <Route path="/talent/profile" element={<ProfilePage />} />
             <Route path="/talent/alerts" element={<JobAlerts />} />
             <Route path="/talent/matches" element={<JobMatches />} />
+            {/* Talent sahifalarini ajratib qo'ydik */}
             <Route path="/talent/job-post/:id" element={<JobDetail />} />
             <Route path="/talent/job-details/:id" element={<CompanyDetail />} />
             <Route
@@ -196,7 +218,6 @@ function App() {
           </Route>
         </Route>
 
-        {/* Catch-all route */}
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </div>
