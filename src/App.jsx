@@ -99,7 +99,15 @@ function App() {
             path="/company/my-jobs"
             element={
               <ProtectedRoute>
-                <div>My Jobs</div>
+               <MyJobs />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/company/job-detail/:id"
+            element={
+              <ProtectedRoute>
+               <JobDetailPageCompany />
               </ProtectedRoute>
             }
           />
