@@ -44,11 +44,14 @@ import ForgotPasswordTalent from "./talent/pages/ResetPassword/ResetPassword";
 import Congratulations from "./talent/components/Congratulations/Congratulations.jsx";
 import Reactions from "./talent/pages/Reactions/Reactions.jsx";
 import RoleSelection from "./Company/RoleSelect/RoleSelect.jsx";
+import Talent from "./Company/Talen/Talents.jsx";
+import TalentDetail from "./Company/Talen/TalentDetail.jsx";
 
 // --- ProtectedRoute ---
 const ProtectedRoute = ({ children }) => {
-  const token = localStorage.getItem("token") || sessionStorage.getItem("token");
-  if (!token) return <Navigate to="/company/signin" replace />;
+  const token =
+    localStorage.getItem("token") || sessionStorage.getItem("token");
+  if (!token) return <Navigate to="/signin" replace />;
   return children ? children : <Outlet />;
 };
 
@@ -56,7 +59,11 @@ function App() {
   const { settings } = useTheme();
 
   return (
-    <div className={`min-h-screen transition-colors duration-500 ${settings.darkMode ? "bg-[#121212]" : "bg-[#F8F9FA]"}`}>
+    <div
+      className={`min-h-screen transition-colors duration-500 ${
+        settings.darkMode ? "bg-[#121212]" : "bg-[#F8F9FA]"
+      }`}
+    >
       <ToastContainer position="top-right" autoClose={3000} />
       <Toaster position="top-right" />
 
@@ -70,10 +77,22 @@ function App() {
           <Route path="/company/signup" element={<SignUpPage />} />
           <Route path="/company/signup/telegram" element={<TelegramVerify />} />
           <Route path="/company/signup/verify" element={<Verify />} />
-          <Route path="/company/forgot-password-1" element={<ForgotPassword1 />} />
-          <Route path="/company/forgot-password-2" element={<ForgotPassword2 />} />
-          <Route path="/company/forgot-password-3" element={<ForgotPassword3 />} />
-          <Route path="/company/forgot-password-4" element={<ForgotPassword4 />} />
+          <Route
+            path="/company/forgot-password-1"
+            element={<ForgotPassword1 />}
+          />
+          <Route
+            path="/company/forgot-password-2"
+            element={<ForgotPassword2 />}
+          />
+          <Route
+            path="/company/forgot-password-3"
+            element={<ForgotPassword3 />}
+          />
+          <Route
+            path="/company/forgot-password-4"
+            element={<ForgotPassword4 />}
+          />
           <Route path="/jobs" element={<Jobs />} />
           <Route path="/talents" element={<Talents />} />
           <Route path="/roleSelection" element={<RoleSelection />} />
@@ -115,10 +134,11 @@ function App() {
             path="/company/talents"
             element={
               <ProtectedRoute>
-                <div>Talents</div>
+                <Talent />
               </ProtectedRoute>
             }
           />
+          <Route path="/company/talents/:id" element={<TalentDetail />} />
           <Route
             path="/company/faq"
             element={
@@ -158,11 +178,25 @@ function App() {
 
         {/* 3. TALENT SECTION - Talent Headeri bilan */}
         <Route path="/talent/signin" element={<SignInTalent />} />
-        <Route path="/talent/registration/step-1" element={<RegistrationForm />} />
-        <Route path="/talent/registration/step-2" element={<RegistrationFormStepTwo />} />
-        <Route path="/talent/registration/step-3" element={<RegistrationFormStepThree />} />
+        <Route
+          path="/talent/registration/step-1"
+          element={<RegistrationForm />}
+        />
+        <Route
+          path="/talent/registration/step-2"
+          element={<RegistrationFormStepTwo />}
+        />
+        <Route
+          path="/talent/registration/step-3"
+          element={<RegistrationFormStepThree />}
+        />
         <Route path="/talent/verify-account" element={<VerifyAccount />} />
-        <Route path="/talent/forgot-password" element={<ForgotPasswordTalent />} />
+        <Route
+          path="/talent/forgot-password"
+          element={<ForgotPasswordTalent />}
+        />
+        <Route path="/talent/jobs" element={<Jobs />} />
+        <Route path="/talent/talents" element={<Talents />} />
 
         <Route element={<ProtectedRoute />}>
           <Route element={<MainLayout />}>
@@ -173,7 +207,10 @@ function App() {
             {/* Talent sahifalarini ajratib qo'ydik */}
             <Route path="/talent/job-post/:id" element={<JobDetail />} />
             <Route path="/talent/job-details/:id" element={<CompanyDetail />} />
-            <Route path="/talent/congratulations" element={<Congratulations />} />
+            <Route
+              path="/talent/congratulations"
+              element={<Congratulations />}
+            />
             <Route path="/talent/settings" element={<Setting />} />
             <Route path="/talent/faq" element={<Faq />} />
             <Route path="/talent/contacts" element={<Contact />} />
