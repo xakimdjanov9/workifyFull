@@ -1,24 +1,26 @@
 import React from "react";
-import Sidebar from "../Sidebar/Sidebar"; 
 import { Outlet } from "react-router-dom";
+import Sidebar from "./Sidebar/Sidebar";
+import { useTheme } from "../../talent/Context/ThemeContext";
 
-const MainLoyout = () => {
+const MainLayout = () => {
+  const { settings } = useTheme();
+
   return (
-    <div className="flex min-h-screen bg-[#F8F9FA]">
-      {/* Sidebar chap tomonda qotib turadi */}
+    <div
+      className={`flex min-h-screen transition-colors duration-500 ${settings.darkMode ? "bg-[#121212]" : "bg-[#F8F9FA]"
+        }`}
+    >
       <aside className="sticky top-0 h-screen shrink-0 z-50">
         <Sidebar />
       </aside>
-
-      {/* Sahifalar almashadigan asosiy qism */}
       <main className="flex-1 min-w-0 overflow-y-auto">
-        {/* ml (margin-left) o'rniga flex-1 o'zi joyni to'g'ri taqsimlaydi */}
-        <div className="p-4 lg:p-8">
-          <Outlet /> 
+        <div className="p-4 md:p-6 lg:p-8 talent-sidebar">
+          <Outlet />
         </div>
       </main>
     </div>
   );
 };
 
-export default MainLoyout;
+export default MainLayout;
