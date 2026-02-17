@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { companyApi, jobApi } from '../../services/api';
 import { useTheme } from "../../talent/Context/ThemeContext";
+import { Link } from 'react-router-dom';
 
-import { 
-  BarChart, Bar, XAxis, YAxis, CartesianGrid, 
-  ResponsiveContainer, AreaChart, Area, Tooltip 
+import {
+  BarChart, Bar, XAxis, YAxis, CartesianGrid,
+  ResponsiveContainer, AreaChart, Area, Tooltip
 } from 'recharts';
 
 // --- SKELETON KOMPONENTI (DARK MODE MOSLASHTIRILDI) ---
@@ -25,10 +26,10 @@ const DashboardSkeleton = ({ isDark }) => (
 );
 
 const getProgressColor = (pct) => {
-  if (pct <= 30) return "#FF4D4D";      
-  if (pct <= 55) return "#FFD60A";      
-  if (pct < 95) return "#56CDAD"; 
-  return "#28A745";                     
+  if (pct <= 30) return "#FF4D4D";
+  if (pct <= 55) return "#FFD60A";
+  if (pct < 95) return "#56CDAD";
+  return "#28A745";
 };
 
 const Dashboard = () => {
@@ -56,19 +57,19 @@ const Dashboard = () => {
   };
 
   const formatData = (jobs, type) => {
-    const labels = type === 'week' 
-      ? ['Mon', 'Tue', 'Wen', 'Thu', 'Fri', 'Sat', 'Sun'] 
+    const labels = type === 'week'
+      ? ['Mon', 'Tue', 'Wen', 'Thu', 'Fri', 'Sat', 'Sun']
       : ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-    
+
     return labels.map((label, index) => ({
       name: label,
-      count: type === 'week' 
+      count: type === 'week'
         ? jobs.filter(j => {
-            const dateStr = j.createdAt || j.created_at;
-            const day = new Date(dateStr).getDay();
-            const mappedDay = day === 0 ? 6 : day - 1;
-            return mappedDay === index;
-          }).length
+          const dateStr = j.createdAt || j.created_at;
+          const day = new Date(dateStr).getDay();
+          const mappedDay = day === 0 ? 6 : day - 1;
+          return mappedDay === index;
+        }).length
         : jobs.filter(j => new Date(j.createdAt || j.created_at).getMonth() === index).length
     }));
   };
@@ -102,10 +103,10 @@ const Dashboard = () => {
         }
 
         const jobsRes = await jobApi.getAll();
-        const myJobs = jobsRes.data.filter(job => 
+        const myJobs = jobsRes.data.filter(job =>
           Number(job.company_id) === myId || Number(job.ownerId) === myId
         );
-        
+
         setRawJobs(myJobs);
         setProfileStats(formatData(myJobs, 'week'));
         setJobStats(formatData(myJobs, 'week'));
@@ -132,9 +133,11 @@ const Dashboard = () => {
         <div className={`px-6 py-4 rounded-lg shadow-sm border transition-colors w-full sm:flex-grow sm:max-w-[930px] ${isDark ? 'bg-[#1E1E1E] border-gray-800' : 'bg-white border-gray-100'}`}>
           <h1 className={`text-[18px] md:text-[20px] font-bold ${isDark ? 'text-white' : 'text-[#202430]'}`}>Dashboard</h1>
         </div>
-        <button className="bg-[#50C594] text-white w-full sm:w-auto px-10 py-4 rounded-lg font-bold hover:opacity-90 active:scale-95 transition-all shadow-md">
+        <Link
+          to="/company/post-job"
+          className="bg-[#50C594] text-white w-full sm:w-auto px-10 py-4 rounded-lg font-bold hover:opacity-90 active:scale-95 transition-all shadow-md">
           Post a Job
-        </button>
+        </Link>
       </div>
 
       <div className="max-w-[1400px] mx-auto space-y-6">
@@ -157,15 +160,15 @@ const Dashboard = () => {
           {/* BAR CHART CARD (PROFILE VIEWS) */}
           <div className={`lg:col-span-8 p-4 md:p-6 rounded-[20px] border shadow-sm flex flex-col items-center h-[400px] transition-colors ${isDark ? 'bg-[#1E1E1E] border-gray-800' : 'bg-white border-[#E9E9E9]'}`}>
             <h3 className={`text-[16px] md:text-[18px] font-bold mb-4 ${isDark ? 'text-white' : 'text-[#202430]'}`}>Profile views</h3>
-            
+
             {/* Responsive Tab Container */}
             <div className={`p-1 rounded-xl flex items-center relative mb-6 w-full max-w-full sm:max-w-[420px] ${isDark ? 'bg-[#2D2D2D]' : 'bg-[#F8F8FD]'}`}>
-                <div className={`absolute shadow-md rounded-lg transition-all duration-500 ${isDark ? 'bg-[#3D3D3D]' : 'bg-white'}`}
-                  style={{ width: 'calc(50% - 4px)', height: 'calc(100% - 8px)', left: profileViewTab === 'week' ? '4px' : '50%' }} />
-                <button onClick={() => { setProfileViewTab('week'); setProfileStats(formatData(rawJobs, 'week')); }}
-                  className={`z-10 font-bold py-2 text-[12px] sm:text-[14px] flex-1 ${profileViewTab === 'week' ? (isDark ? 'text-white' : 'text-[#202430]') : 'text-gray-400'}`}>This week</button>
-                <button onClick={() => { setProfileViewTab('month'); setProfileStats(formatData(rawJobs, 'month')); }}
-                  className={`z-10 font-bold py-2 text-[12px] sm:text-[14px] flex-1 ${profileViewTab === 'month' ? (isDark ? 'text-white' : 'text-[#202430]') : 'text-gray-400'}`}>This month</button>
+              <div className={`absolute shadow-md rounded-lg transition-all duration-500 ${isDark ? 'bg-[#3D3D3D]' : 'bg-white'}`}
+                style={{ width: 'calc(50% - 4px)', height: 'calc(100% - 8px)', left: profileViewTab === 'week' ? '4px' : '50%' }} />
+              <button onClick={() => { setProfileViewTab('week'); setProfileStats(formatData(rawJobs, 'week')); }}
+                className={`z-10 font-bold py-2 text-[12px] sm:text-[14px] flex-1 ${profileViewTab === 'week' ? (isDark ? 'text-white' : 'text-[#202430]') : 'text-gray-400'}`}>This week</button>
+              <button onClick={() => { setProfileViewTab('month'); setProfileStats(formatData(rawJobs, 'month')); }}
+                className={`z-10 font-bold py-2 text-[12px] sm:text-[14px] flex-1 ${profileViewTab === 'month' ? (isDark ? 'text-white' : 'text-[#202430]') : 'text-gray-400'}`}>This month</button>
             </div>
 
             <div className="flex-grow w-full">
@@ -178,9 +181,9 @@ const Dashboard = () => {
                     </linearGradient>
                   </defs>
                   <CartesianGrid strokeDasharray="3 3" vertical={false} stroke={isDark ? "#333" : "#F3F3F3"} />
-                  <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{fill: '#A3A3A3', fontSize: isMobile ? 9 : 11}} />
-                  <YAxis axisLine={false} tickLine={false} tick={{fill: '#A3A3A3', fontSize: 10}} width={40} domain={[0, getMaxScale(profileStats)]} />
-                  <Tooltip cursor={{fill: isDark ? '#2D2D2D' : '#F8F8FD'}} contentStyle={isDark ? {backgroundColor: '#1E1E1E', borderColor: '#333', color: '#fff'} : {}} />
+                  <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fill: '#A3A3A3', fontSize: isMobile ? 9 : 11 }} />
+                  <YAxis axisLine={false} tickLine={false} tick={{ fill: '#A3A3A3', fontSize: 10 }} width={40} domain={[0, getMaxScale(profileStats)]} />
+                  <Tooltip cursor={{ fill: isDark ? '#2D2D2D' : '#F8F8FD' }} contentStyle={isDark ? { backgroundColor: '#1E1E1E', borderColor: '#333', color: '#fff' } : {}} />
                   <Bar dataKey="count" fill="url(#barGradient)" radius={[4, 4, 0, 0]} barSize={isMobile ? 12 : 16} />
                 </BarChart>
               </ResponsiveContainer>
@@ -190,34 +193,34 @@ const Dashboard = () => {
 
         {/* AREA CHART CARD (JOB POSTS) */}
         <div className={`p-4 md:p-8 rounded-[20px] border shadow-sm flex flex-col items-center transition-colors ${isDark ? 'bg-[#1E1E1E] border-gray-800' : 'bg-white border-[#E9E9E9]'}`}>
-            <h3 className={`text-[16px] md:text-[18px] font-bold mb-6 ${isDark ? 'text-white' : 'text-[#202430]'}`}>Job posts</h3>
-            
-            <div className={`p-1 rounded-xl flex items-center relative mb-8 w-full max-w-full sm:max-w-[420px] ${isDark ? 'bg-[#2D2D2D]' : 'bg-[#F8F8FD]'}`}>
-                <div className={`absolute shadow-md rounded-lg transition-all duration-500 ${isDark ? 'bg-[#3D3D3D]' : 'bg-white'}`}
-                  style={{ width: 'calc(50% - 4px)', height: 'calc(100% - 8px)', left: jobPostTab === 'week' ? '4px' : '50%' }} />
-                <button onClick={() => { setJobPostTab('week'); setJobStats(formatData(rawJobs, 'week')); }}
-                  className={`z-10 font-bold py-2 text-[12px] sm:text-[14px] flex-1 ${jobPostTab === 'week' ? (isDark ? 'text-white' : 'text-[#202430]') : 'text-gray-400'}`}>This week</button>
-                <button onClick={() => { setJobPostTab('month'); setJobStats(formatData(rawJobs, 'month')); }}
-                  className={`z-10 font-bold py-2 text-[12px] sm:text-[14px] flex-1 ${jobPostTab === 'month' ? (isDark ? 'text-white' : 'text-[#202430]') : 'text-gray-400'}`}>This month</button>
-            </div>
+          <h3 className={`text-[16px] md:text-[18px] font-bold mb-6 ${isDark ? 'text-white' : 'text-[#202430]'}`}>Job posts</h3>
 
-            <div className="h-[250px] md:h-[300px] w-full">
-              <ResponsiveContainer width="100%" height="100%">
-                <AreaChart data={jobStats} margin={{ top: 5, right: 10, left: -25, bottom: 0 }}>
-                  <defs>
-                    <linearGradient id="colorJob" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="0%" stopColor="#5ABF89" stopOpacity={0.6}/>
-                      <stop offset="100%" stopColor="#5ABF8900" stopOpacity={0}/>
-                    </linearGradient>
-                  </defs>
-                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke={isDark ? "#333" : "#F3F3F3"} />
-                  <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{fill: '#A3A3A3', fontSize: isMobile ? 9 : 11}} />
-                  <YAxis axisLine={false} tickLine={false} tick={{fill: '#A3A3A3', fontSize: 10}} width={40} domain={[0, getMaxScale(jobStats)]} />
-                  <Tooltip contentStyle={isDark ? {backgroundColor: '#1E1E1E', borderColor: '#333', color: '#fff'} : {}} />
-                  <Area type="monotone" dataKey="count" stroke="#50C594" strokeWidth={3} fill="url(#colorJob)" />
-                </AreaChart>
-              </ResponsiveContainer>
-            </div>
+          <div className={`p-1 rounded-xl flex items-center relative mb-8 w-full max-w-full sm:max-w-[420px] ${isDark ? 'bg-[#2D2D2D]' : 'bg-[#F8F8FD]'}`}>
+            <div className={`absolute shadow-md rounded-lg transition-all duration-500 ${isDark ? 'bg-[#3D3D3D]' : 'bg-white'}`}
+              style={{ width: 'calc(50% - 4px)', height: 'calc(100% - 8px)', left: jobPostTab === 'week' ? '4px' : '50%' }} />
+            <button onClick={() => { setJobPostTab('week'); setJobStats(formatData(rawJobs, 'week')); }}
+              className={`z-10 font-bold py-2 text-[12px] sm:text-[14px] flex-1 ${jobPostTab === 'week' ? (isDark ? 'text-white' : 'text-[#202430]') : 'text-gray-400'}`}>This week</button>
+            <button onClick={() => { setJobPostTab('month'); setJobStats(formatData(rawJobs, 'month')); }}
+              className={`z-10 font-bold py-2 text-[12px] sm:text-[14px] flex-1 ${jobPostTab === 'month' ? (isDark ? 'text-white' : 'text-[#202430]') : 'text-gray-400'}`}>This month</button>
+          </div>
+
+          <div className="h-[250px] md:h-[300px] w-full">
+            <ResponsiveContainer width="100%" height="100%">
+              <AreaChart data={jobStats} margin={{ top: 5, right: 10, left: -25, bottom: 0 }}>
+                <defs>
+                  <linearGradient id="colorJob" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor="#5ABF89" stopOpacity={0.6} />
+                    <stop offset="100%" stopColor="#5ABF8900" stopOpacity={0} />
+                  </linearGradient>
+                </defs>
+                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke={isDark ? "#333" : "#F3F3F3"} />
+                <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fill: '#A3A3A3', fontSize: isMobile ? 9 : 11 }} />
+                <YAxis axisLine={false} tickLine={false} tick={{ fill: '#A3A3A3', fontSize: 10 }} width={40} domain={[0, getMaxScale(jobStats)]} />
+                <Tooltip contentStyle={isDark ? { backgroundColor: '#1E1E1E', borderColor: '#333', color: '#fff' } : {}} />
+                <Area type="monotone" dataKey="count" stroke="#50C594" strokeWidth={3} fill="url(#colorJob)" />
+              </AreaChart>
+            </ResponsiveContainer>
+          </div>
         </div>
       </div>
     </div>
