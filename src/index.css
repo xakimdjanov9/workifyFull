@@ -20,3 +20,8 @@
 body {
   background-color: #f0f2f5;
 }
+
+::-webkit-scrollbar{
+  width: 0px;
+  height: 0;
+}
