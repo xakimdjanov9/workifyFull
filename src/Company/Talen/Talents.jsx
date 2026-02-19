@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { talenApi } from "../../services/api";
 import { motion, AnimatePresence } from "framer-motion";
 import { HiOutlineBriefcase } from "react-icons/hi";
 import { PiMonitorBold } from "react-icons/pi";
 import { LuUser } from "react-icons/lu";
 import {
   FaUser,
-  FaGlobe,
   FaMoneyBillWave,
   FaCity,
   FaEarthAmericas,
@@ -21,6 +20,7 @@ const Talents = () => {
   const [isOpen, setIsOpen] = useState(true);
   const [activeTab, setActiveTab] = useState("Skills and expertice");
 
+  // --- FILTER STATES ---
   const [selectedSpecs, setSelectedSpecs] = useState([]);
   const [selectedLangs, setSelectedLangs] = useState([]);
   const [occupation, setOccupation] = useState("");
@@ -39,18 +39,22 @@ const Talents = () => {
     "https://media.istockphoto.com/id/1337144146/vector/default-avatar-profile-icon-vector.jpg?s=612x612&w=0&k=20&c=BIbFwuv7FxTWvh5S3vB6bkT0Qv8Vn8N5Ffseq84ClGI=";
   const navigate = useNavigate();
 
+  // --- API DATA FETCH ---
   useEffect(() => {
-    axios
-      .get("https://workifybackend-production.up.railway.app/api/talent")
-      .then((res) => {
+    const fetchTalents = async () => {
+      try {
+        const res = await talenApi.getAll();
         const data = Array.isArray(res.data) ? res.data : res.data.data || [];
         setAllTalents(data);
         setFilteredTalents(data);
-      })
-      .catch((err) => console.error("API Error:", err));
+      } catch (err) {
+        console.error("Talantlarni yuklashda xatolik:", err);
+      }
+    };
+    fetchTalents();
   }, []);
 
-  // --- TAKOMILLASHTIRILGAN FILTER MANTIQI ---
+  // --- FILTER LOGIC ---
   useEffect(() => {
     let result = [...allTalents];
 
@@ -58,10 +62,12 @@ const Talents = () => {
       result = result.filter((t) =>
         t.occupation?.toLowerCase().includes(occupation.toLowerCase()),
       );
+
     if (speciality)
       result = result.filter((t) =>
         t.specialty?.toLowerCase().includes(speciality.toLowerCase()),
       );
+
     if (selectedSpecs.length > 0)
       result = result.filter((t) => selectedSpecs.includes(t.specialty));
 
@@ -81,10 +87,7 @@ const Talents = () => {
       });
     }
 
-    // Skills va Experience mantiqi: Kamida yozilgan yilga teng yoki ko'p bo'lishi kerak
-    // --- SKILLS VA EXPERIENCE (TUZATILGAN QISMI) ---
     const activeSkills = skillsRows.filter((r) => r.skill.trim() !== "");
-
     if (activeSkills.length > 0) {
       result = result.filter((talent) => {
         try {
@@ -95,26 +98,19 @@ const Talents = () => {
 
           return activeSkills.every((fRow) => {
             return talentSkills.some((ts) => {
-              const skillNameFromDB = (ts.skill || "").toLowerCase();
-              const skillNameFromFilter = fRow.skill.toLowerCase();
-
-              const isSkillMatch =
-                skillNameFromDB.includes(skillNameFromFilter);
-
+              const skillMatch = (ts.skill || "")
+                .toLowerCase()
+                .includes(fRow.skill.toLowerCase());
               const talentExpRaw = ts.experience_years || "0";
               const talentExpNumber =
                 parseInt(talentExpRaw.replace(/\D/g, "")) || 0;
-
               const requiredExpNumber = parseInt(fRow.experience) || 0;
-
-              const isExpMatch =
+              const expMatch =
                 fRow.experience === "" || talentExpNumber >= requiredExpNumber;
-
-              return isSkillMatch && isExpMatch;
+              return skillMatch && expMatch;
             });
           });
-        } catch (e) {
-          console.error("Skill parsing error:", e);
+        } catch {
           return false;
         }
       });
@@ -159,9 +155,9 @@ const Talents = () => {
       <div className="max-w-[1240px] mx-auto">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6 md:mb-10">
           <h1 className="text-[28px] md:text-[32px] font-black">Talents</h1>
-          <Link to="/company/post-job" className="w-full md:w-auto bg-[#50C594] text-white px-8 py-3 rounded-[15px] font-bold text-[18px] shadow-sm hover:bg-[#45b385] transition-colors">
+          <button className="w-full md:w-auto bg-[#50C594] text-white px-8 py-3 rounded-[15px] font-bold text-[18px] shadow-sm hover:bg-[#45b385] transition-colors">
             Post a Job
-          </Link>
+          </button>
         </div>
 
         {/* Filter Card */}
@@ -280,6 +276,7 @@ const Talents = () => {
                       </div>
                     </div>
 
+                    {/* Languages */}
                     <div className="space-y-4">
                       <div className="flex items-center gap-2 text-[#163D5C] font-bold text-[16px] md:text-[18px]">
                         Languages
@@ -303,6 +300,7 @@ const Talents = () => {
                       </div>
                     </div>
 
+                    {/* Skills Rows */}
                     <div className="space-y-4">
                       <div className="hidden md:grid grid-cols-2 gap-10 font-bold text-[18px] text-[#163D5C]">
                         <p>Skills</p>
@@ -328,14 +326,14 @@ const Talents = () => {
                                   ),
                                 )
                               }
-                              className="w-full pl-12 pr-4 py-3 bg-[#F8F9FA] md:bg-[#F8F9FA] border border-transparent rounded-[12px] focus:bg-white focus:border-[#8B39E5] outline-none transition-all"
+                              className="w-full pl-12 pr-4 py-3 bg-[#F8F9FA] rounded-[12px] focus:bg-white focus:border-[#8B39E5] outline-none"
                             />
                           </div>
                           <div className="relative">
                             <FaUser className="absolute left-4 top-1/2 -translate-y-1/2 text-[16px] text-[#163D5C]" />
                             <input
                               type="number"
-                              placeholder="Minimum years (e.g. 2)"
+                              placeholder="Min years"
                               value={row.experience}
                               onChange={(e) =>
                                 setSkillsRows(
@@ -346,11 +344,11 @@ const Talents = () => {
                                   ),
                                 )
                               }
-                              className="w-full pl-12 pr-12 py-3 bg-[#F8F9FA] md:bg-[#F8F9FA] border border-transparent rounded-[12px] focus:bg-white focus:border-[#8B39E5] outline-none transition-all"
+                              className="w-full pl-12 pr-12 py-3 bg-[#F8F9FA] rounded-[12px] focus:bg-white focus:border-[#8B39E5] outline-none"
                             />
                             {skillsRows.length > 1 && (
                               <IoCloseCircleOutline
-                                className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-300 cursor-pointer hover:text-red-500 transition-colors"
+                                className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-300 cursor-pointer hover:text-red-500"
                                 size={22}
                                 onClick={() =>
                                   setSkillsRows(
@@ -362,24 +360,17 @@ const Talents = () => {
                           </div>
                         </div>
                       ))}
-                      <div className="flex flex-wrap gap-3 pt-2">
-                        <button
-                          onClick={() =>
-                            setSkillsRows([
-                              ...skillsRows,
-                              {
-                                id: Date.now(),
-                                skill: "",
-                                experience: "",
-                                isDefault: false,
-                              },
-                            ])
-                          }
-                          className="flex items-center gap-2 bg-[#50C594]/10 text-[#50C594] px-6 py-2.5 rounded-[12px] font-bold hover:bg-[#50C594] hover:text-white transition-all text-sm md:text-base"
-                        >
-                          <FaPlus size={14} /> Add skill
-                        </button>
-                      </div>
+                      <button
+                        onClick={() =>
+                          setSkillsRows([
+                            ...skillsRows,
+                            { id: Date.now(), skill: "", experience: "" },
+                          ])
+                        }
+                        className="flex items-center gap-2 bg-[#50C594]/10 text-[#50C594] px-6 py-2.5 rounded-[12px] font-bold hover:bg-[#50C594] hover:text-white transition-all"
+                      >
+                        <FaPlus size={14} /> Add skill
+                      </button>
                     </div>
                   </div>
                 )}
@@ -403,7 +394,7 @@ const Talents = () => {
                               onClick={() =>
                                 setWorkType(workType === type ? "" : type)
                               }
-                              className={`flex-1 min-w-[70px] py-2 rounded-[12px] text-[12px] md:text-[14px] font-bold capitalize transition-all ${workType === type ? "bg-white shadow-md text-[#8B39E5]" : "text-gray-400 hover:text-gray-600"}`}
+                              className={`flex-1 min-w-[70px] py-2 rounded-[12px] text-[12px] md:text-[14px] font-bold capitalize transition-all ${workType === type ? "bg-white shadow-md text-[#8B39E5]" : "text-gray-400"}`}
                             >
                               {type}
                             </button>
@@ -424,7 +415,7 @@ const Talents = () => {
                                   workplaceType === type ? "" : type,
                                 )
                               }
-                              className={`flex-1 py-2 rounded-[12px] text-[12px] md:text-[14px] font-bold transition-all ${workplaceType === type ? "bg-white shadow-md text-[#8B39E5]" : "text-gray-400 hover:text-gray-600"}`}
+                              className={`flex-1 py-2 rounded-[12px] text-[12px] md:text-[14px] font-bold transition-all ${workplaceType === type ? "bg-white shadow-md text-[#8B39E5]" : "text-gray-400"}`}
                             >
                               {type}
                             </button>
@@ -438,7 +429,7 @@ const Talents = () => {
                         </p>
                         <div className="flex items-center gap-2 md:gap-3">
                           <div className="relative flex-1">
-                            <FaMoneyBillWave className="absolute left-3 md:left-4 top-1/2 -translate-y-1/2 text-gray-400" />
+                            <FaMoneyBillWave className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
                             <input
                               type="number"
                               placeholder="Min"
@@ -449,12 +440,12 @@ const Talents = () => {
                                   min: e.target.value,
                                 })
                               }
-                              className="w-full pl-9 md:pl-11 p-3 bg-[#F8F9FA] border border-transparent rounded-[12px] outline-none focus:bg-white focus:border-[#8B39E5] text-sm md:text-base"
+                              className="w-full pl-9 p-3 bg-[#F8F9FA] rounded-[12px] outline-none focus:bg-white"
                             />
                           </div>
                           <div className="text-gray-400 font-bold">—</div>
                           <div className="relative flex-1">
-                            <FaMoneyBillWave className="absolute left-3 md:left-4 top-1/2 -translate-y-1/2 text-gray-400" />
+                            <FaMoneyBillWave className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
                             <input
                               type="number"
                               placeholder="Max"
@@ -465,7 +456,7 @@ const Talents = () => {
                                   max: e.target.value,
                                 })
                               }
-                              className="w-full pl-9 md:pl-11 p-3 bg-[#F8F9FA] border border-transparent rounded-[12px] outline-none focus:bg-white focus:border-[#8B39E5] text-sm md:text-base"
+                              className="w-full pl-9 p-3 bg-[#F8F9FA] rounded-[12px] outline-none focus:bg-white"
                             />
                           </div>
                         </div>
@@ -477,7 +468,7 @@ const Talents = () => {
                             Country
                           </p>
                           <div className="relative">
-                            <FaEarthAmericas className="absolute left-3 md:left-4 top-1/2 -translate-y-1/2 text-gray-400" />
+                            <FaEarthAmericas className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
                             <input
                               type="text"
                               placeholder="Uzbekistan"
@@ -488,7 +479,7 @@ const Talents = () => {
                                   country: e.target.value,
                                 })
                               }
-                              className="w-full pl-9 md:pl-11 p-3 bg-[#F8F9FA] border border-transparent rounded-[12px] outline-none focus:bg-white focus:border-[#8B39E5] text-sm md:text-base"
+                              className="w-full pl-9 p-3 bg-[#F8F9FA] rounded-[12px] outline-none focus:bg-white"
                             />
                           </div>
                         </div>
@@ -497,7 +488,7 @@ const Talents = () => {
                             City
                           </p>
                           <div className="relative">
-                            <FaCity className="absolute left-3 md:left-4 top-1/2 -translate-y-1/2 text-gray-400" />
+                            <FaCity className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
                             <input
                               type="text"
                               placeholder="Tashkent"
@@ -508,7 +499,7 @@ const Talents = () => {
                                   city: e.target.value,
                                 })
                               }
-                              className="w-full pl-9 md:pl-11 p-3 bg-[#F8F9FA] border border-transparent rounded-[12px] outline-none focus:bg-white focus:border-[#8B39E5] text-sm md:text-base"
+                              className="w-full pl-9 p-3 bg-[#F8F9FA] rounded-[12px] outline-none focus:bg-white"
                             />
                           </div>
                         </div>
@@ -521,8 +512,8 @@ const Talents = () => {
           </AnimatePresence>
         </div>
 
-        {/* Results Header */}
-        <div className="max-w-[1043px] mx-auto mb-6 md:mb-8 pt-6 md:pt-8 border-t border-gray-200">
+        {/* Results Count */}
+        <div className="max-w-[1043px] mx-auto mb-6 md:mb-8 pt-6 border-t border-gray-200">
           <h2 className="text-[20px] md:text-[24px] font-bold">
             {filteredTalents.length}{" "}
             {filteredTalents.length === 1 ? "talent" : "talents"} found
@@ -534,36 +525,65 @@ const Talents = () => {
           {filteredTalents.map((talent) => (
             <div
               key={talent.id}
-              className="bg-white rounded-[30px] border border-gray-100 p-6 text-center w-full max-w-[330px] h-auto min-h-[440px] shadow-sm flex flex-col items-center justify-between hover:border-[#8B39E5] hover:shadow-xl transition-all duration-300 group"
+              className="bg-white rounded-[40px] border border-gray-100 p-8 text-center w-full max-w-[350px] shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col items-center"
             >
-              <div className="w-[110px] h-[110px] md:w-[120px] md:h-[120px] rounded-full overflow-hidden border-4 border-[#F8F9FA] group-hover:border-[#8B39E5]/10 transition-colors">
-                <img
-                  src={talent.image || defaultAvatar}
-                  className="w-full h-full object-cover"
-                  alt="Avatar"
-                />
+              <div className="relative mb-6">
+                <div className="w-[140px] h-[140px] rounded-full overflow-hidden border-4 border-white shadow-sm">
+                  <img
+                    src={talent.image || defaultAvatar}
+                    className="w-full h-full object-cover"
+                    alt="Avatar"
+                  />
+                </div>
               </div>
-              <div className="mt-4 space-y-1">
-                <h3 className="font-bold text-[17px] md:text-[18px] group-hover:text-[#8B39E5] transition-colors">
+
+              <div className="flex items-center gap-2 mb-1">
+                <h3 className="font-bold text-[22px] text-[#2D2D2D]">
                   {talent.first_name} {talent.last_name}
                 </h3>
-                <p className="text-gray-500 text-[13px] md:text-[14px] bg-[#F8F9FA] px-3 py-1 rounded-full inline-block">
-                  {talent.occupation || "Specialist"}
+              </div>
+
+              <div className="space-y-1 mb-4">
+                <p className="text-[#888888] text-[16px] font-medium">
+                  {talent.specialty || talent.occupation}
+                </p>
+                <p className="text-[#888888] text-[15px]">
+                  {talent.city}, {talent.country} ({talent.workplace_type})
                 </p>
               </div>
 
-              <div className="my-4">
-                <p className="text-gray-400 text-[11px] md:text-[12px] uppercase tracking-wider font-bold">
-                  Minimum Salary
-                </p>
-                <div className="font-black text-[22px] md:text-[24px] text-[#111827]">
-                  ${talent.minimum_salary?.toLocaleString() || "0"}
-                </div>
+              <div className="mb-4">
+                <span className="font-black text-[24px] text-[#2D2D2D]">
+                  ${" "}
+                  {new Intl.NumberFormat("de-DE", {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                  }).format(talent.minimum_salary || 0)}
+                </span>
+              </div>
+
+              {/* Fake Rating */}
+              <div className="flex items-center gap-1 mb-8">
+                {[1, 2, 3, 4].map((star) => (
+                  <svg
+                    key={star}
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="#FFC107"
+                  >
+                    <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                  </svg>
+                ))}
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="#D1D5DB">
+                  <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                </svg>
+                <span className="text-gray-400 text-sm ml-1">(4.0)</span>
               </div>
 
               <button
                 onClick={() => navigate(`/company/talents/${talent.id}`)}
-                className="w-full py-3 border-2 border-[#8B39E5] text-[#8B39E5] rounded-xl font-bold hover:bg-[#8B39E5] hover:text-white transition-all transform active:scale-95"
+                className="w-[190px] py-1.5 border-2 border-[#8B39E5] text-[#8B39E5] rounded-[20px] font-bold text-[18px] hover:bg-[#8c39e5] hover:text-white transition-all"
               >
                 View profile
               </button>
@@ -572,8 +592,8 @@ const Talents = () => {
         </div>
 
         {filteredTalents.length === 0 && (
-          <div className="text-center py-16 md:py-20 bg-white rounded-[30px] border border-dashed border-gray-300">
-            <p className="text-gray-400 text-base md:text-lg">
+          <div className="text-center py-20 bg-white rounded-[30px] border border-dashed border-gray-300">
+            <p className="text-gray-400 text-lg">
               No talents found matching your filters.
             </p>
           </div>
