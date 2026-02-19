@@ -28,7 +28,7 @@ const PostJob = () => {
     location: '',
     salary_min: '',
     salary_max: '',
-    skills: [{ name: '', experience: '' }],
+    skils: [{ name: '', experience: '' }],
     languages: [{ name: '', level: '' }],
     description: ''
   });
@@ -54,10 +54,10 @@ const PostJob = () => {
     region.toLowerCase().includes(formData.location.toLowerCase())
   );
 
-  const parseTalentSkills = (skillsStr) => {
+  const parseTalentSkils = (skilsStr) => {
     try {
-      if (!skillsStr) return [];
-      const parsed = typeof skillsStr === 'string' ? JSON.parse(skillsStr) : skillsStr;
+      if (!skilsStr) return [];
+      const parsed = typeof skilsStr === 'string' ? JSON.parse(skilsStr) : skilsStr;
       return Array.isArray(parsed) ? parsed : [];
     } catch (e) { return []; }
   };
@@ -67,19 +67,20 @@ const PostJob = () => {
     const talentOcc = (talent.occupation || "").toLowerCase().trim();
     const talentSpec = (talent.specialty || "").toLowerCase().trim();
     const isOccMatch = talentOcc.includes(jobOcc) || talentSpec.includes(jobOcc) || jobOcc.includes(talentOcc);
-    const talentSkills = parseTalentSkills(talent.skils);
-    const jobSkills = formData.skills.map(s => s.name.toLowerCase().trim()).filter(s => s !== "");
-    const isSkillMatch = jobSkills.length === 0 || talentSkills.some(ts =>
-      jobSkills.some(js => ts.skill?.toLowerCase().includes(js))
+    const talentSkils = parseTalentSkils(talent.skils);
+    const jobSkils = formData.skils.map(s => s.name.toLowerCase().trim()).filter(s => s !== "");
+    const isSkillMatch = jobSkils.length === 0 || talentSkils.some(ts =>
+      jobSkils.some(js => ts.skil?.toLowerCase().includes(js))
     );
     return isOccMatch || isSkillMatch;
   });
 
+  // Dinamik o'zgarish: Experience faqat sonni saqlaydi
   const handleDynamicChange = (index, field, value, type) => {
     const newData = [...formData[type]];
     if (field === 'experience') {
-      const num = value.replace(/\D/g, "");
-      newData[index][field] = num ? `${num} years` : "";
+      // Faqat raqamlarni qoldirish
+      newData[index][field] = value.replace(/\D/g, "");
     } else {
       newData[index][field] = value;
     }
@@ -87,7 +88,7 @@ const PostJob = () => {
   };
 
   const addField = (type) => {
-    const newItem = type === 'skills' ? { name: '', experience: '' } : { name: '', level: '' };
+    const newItem = type === 'skils' ? { name: '', experience: '' } : { name: '', level: '' };
     setFormData({ ...formData, [type]: [...formData[type], newItem] });
   };
 
@@ -114,7 +115,8 @@ const PostJob = () => {
         salary_max: Number(formData.salary_max),
         description: formData.description,
         location: formData.location,
-        skills: formData.skills.map(s => `${s.name} (${s.experience})`).join(", ")
+        // MANA SHU YERDA: Bazaga yuborishda "years" qo'shiladi
+        skils: formData.skils.map(s => `${s.name} (${s.experience} years)`).join(", ")
       };
       await jobApi.create(payload);
       toast.success("Ish muvaffaqiyatli joylashtirildi!");
@@ -180,24 +182,27 @@ const PostJob = () => {
     );
   }
 
-  const inputClass = "w-full p-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#50C594] bg-white transition-all";
+  const inputClass = "w-full p-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#5CB85C] bg-white transition-all";
+  const btnStyle = "bg-[#5CB85C] hover:bg-[#4cae4c] text-white transition-all active:scale-95 shadow-sm";
 
   return (
     <div className="max-w-5xl mx-auto my-6 px-4">
       <ToastContainer position="top-right" autoClose={3000} />
       
+      {/* 1. BACK BUTTON */}
       <div className="flex items-center justify-between bg-white p-3 rounded-[1.5rem] shadow-sm mb-8 border border-gray-50">
         <button 
           onClick={() => navigate(-1)} 
-          className="flex items-center gap-2 px-6 py-2 text-[#343C44] font-bold text-xl hover:text-[#50C594] transition-colors"
+          className="flex items-center gap-2 px-6 py-2 text-[#343C44] font-bold text-xl hover:text-[#5CB85C] transition-colors"
         >
           <ArrowLeft size={24} />
           Back
         </button>
 
+        {/* 2. MY JOBS BUTTON */}
         <button 
           onClick={() => navigate('/company/my-jobs')} 
-          className="bg-[#50C594] hover:opacity-90 text-white px-8 py-3 rounded-2xl font-bold transition-all shadow-sm active:scale-95"
+          className={`${btnStyle} px-8 py-3 rounded-2xl font-bold`}
         >
           My Jobs
         </button>
@@ -234,7 +239,7 @@ const PostJob = () => {
               {showRegions && filteredRegions.length > 0 && (
                 <div className="absolute z-50 w-full mt-1 bg-white border border-gray-200 rounded-xl shadow-xl max-h-60 overflow-y-auto">
                   {filteredRegions.map(region => (
-                    <div key={region} className="px-4 py-3 hover:bg-[#50C594] hover:text-white cursor-pointer transition-colors border-b border-gray-50 last:border-none" onClick={() => { setFormData({ ...formData, location: region }); setShowRegions(false); }}>
+                    <div key={region} className="px-4 py-3 hover:bg-[#5CB85C] hover:text-white cursor-pointer transition-colors border-b border-gray-50 last:border-none" onClick={() => { setFormData({ ...formData, location: region }); setShowRegions(false); }}>
                       {region}
                     </div>
                   ))}
@@ -247,12 +252,12 @@ const PostJob = () => {
               <div className="flex items-center gap-2">
                 <div className="relative w-full">
                   <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">$</span>
-                  <input type="text" className={`${inputClass} pl-7`} placeholder="300.00" value={formData.salary_min} onChange={(e) => setFormData({ ...formData, salary_min: e.target.value.replace(/\D/g, "") })} />
+                  <input type="text" className={`${inputClass} pl-7`} placeholder="300" value={formData.salary_min} onChange={(e) => setFormData({ ...formData, salary_min: e.target.value.replace(/\D/g, "") })} />
                 </div>
                 <span className="text-gray-400 text-sm">To</span>
                 <div className="relative w-full">
                   <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">$</span>
-                  <input type="text" className={`${inputClass} pl-7`} placeholder="500.00" value={formData.salary_max} onChange={(e) => setFormData({ ...formData, salary_max: e.target.value.replace(/\D/g, "") })} />
+                  <input type="text" className={`${inputClass} pl-7`} placeholder="500" value={formData.salary_max} onChange={(e) => setFormData({ ...formData, salary_max: e.target.value.replace(/\D/g, "") })} />
                 </div>
               </div>
             </div>
@@ -260,38 +265,28 @@ const PostJob = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
             <div className="space-y-4">
-              <label className="text-sm font-semibold text-gray-700 uppercase tracking-wider">Skills</label>
-              {formData.skills.map((skill, index) => (
+              <label className="text-sm font-semibold text-gray-700 uppercase tracking-wider">Skils</label>
+              {formData.skils.map((skill, index) => (
                 <div key={index} className="flex gap-3 items-center group">
-                  <input className={inputClass} placeholder="Figma" value={skill.name} onChange={(e) => handleDynamicChange(index, 'name', e.target.value, 'skills')} />
+                  <input className={inputClass} placeholder="Figma" value={skill.name} onChange={(e) => handleDynamicChange(index, 'name', e.target.value, 'skils')} />
+                  {/* INPUTDA FAQAT SON KO'RINADI */}
                   <input 
                     className={inputClass} 
-                    placeholder="2 years" 
+                    placeholder="Years (e.g. 5)" 
                     value={skill.experience} 
-                    onChange={(e) => handleDynamicChange(index, 'experience', e.target.value, 'skills')}
-                    onKeyDown={(e) => {
-                      if (e.key === 'Backspace') {
-                        const digits = e.target.value.replace(/\D/g, "");
-                        if (digits.length > 0) {
-                          const newDigits = digits.slice(0, -1);
-                          const newData = [...formData.skills];
-                          newData[index].experience = newDigits ? `${newDigits} years` : "";
-                          setFormData({ ...formData, skills: newData });
-                          e.preventDefault();
-                        }
-                      }
-                    }}
+                    onChange={(e) => handleDynamicChange(index, 'experience', e.target.value, 'skils')}
                   />
                   {index > 0 && (
                     <XCircle 
                       className="text-gray-300 hover:text-red-500 cursor-pointer transition-colors flex-shrink-0" 
-                      onClick={() => removeField(index, 'skills')} 
+                      onClick={() => removeField(index, 'skils')} 
                       size={32} 
                     />
                   )}
                 </div>
               ))}
-              <button type="button" onClick={() => addField('skills')} className="px-6 py-2 bg-[#50C594] text-white rounded-full text-sm font-medium hover:opacity-90 transition-colors">Add skill</button>
+              {/* 3. ADD SKILL BUTTON */}
+              <button type="button" onClick={() => addField('skils')} className={`${btnStyle} px-6 py-2 rounded-full text-sm font-medium`}>Add skill</button>
             </div>
 
             <div className="space-y-4">
@@ -307,7 +302,7 @@ const PostJob = () => {
                     {activeLangIndex === index && (
                       <div className="absolute z-50 w-full mt-1 bg-white border border-gray-200 rounded-xl shadow-xl max-h-48 overflow-y-auto">
                         {LANGUAGE_LEVELS.map(level => (
-                          <div key={level} className="px-4 py-2 hover:bg-[#50C594] hover:text-white cursor-pointer text-sm transition-colors border-b border-gray-50 last:border-none" onClick={() => {
+                          <div key={level} className="px-4 py-2 hover:bg-[#5CB85C] hover:text-white cursor-pointer text-sm transition-colors border-b border-gray-50 last:border-none" onClick={() => {
                             const newLangs = [...formData.languages];
                             newLangs[index].level = level;
                             setFormData({ ...formData, languages: newLangs });
@@ -326,7 +321,8 @@ const PostJob = () => {
                   )}
                 </div>
               ))}
-              <button type="button" onClick={() => addField('languages')} className="px-6 py-2 bg-[#50C594] text-white rounded-full text-sm font-medium hover:opacity-90 transition-colors">Add language</button>
+              {/* 4. ADD LANGUAGE BUTTON */}
+              <button type="button" onClick={() => addField('languages')} className={`${btnStyle} px-6 py-2 rounded-full text-sm font-medium`}>Add language</button>
             </div>
           </div>
 
@@ -338,7 +334,8 @@ const PostJob = () => {
           </div>
 
           <div className="pt-6 text-center">
-            <button type="submit" disabled={loading} className="w-full md:w-1/3 py-3 bg-[#50C594] hover:opacity-90 text-white font-bold rounded-full text-lg shadow-lg transition-all active:scale-95 disabled:opacity-50">
+            {/* 5. SUBMIT BUTTON */}
+            <button type="submit" disabled={loading} className={`${btnStyle} w-full md:w-1/3 py-3 rounded-full text-lg font-bold disabled:opacity-50`}>
               {loading ? "Posting..." : "Submit Job"}
             </button>
           </div>
