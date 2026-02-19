@@ -333,7 +333,6 @@ const JobDetailPageCompany = () => {
                     <button onClick={() => setActiveDetailTab('Matches')} className={`flex-1 py-3.5 z-10 font-bold text-xs sm:text-sm transition-colors ${activeDetailTab === 'Matches' ? 'text-[#343C44]' : 'text-[#8E8E8E]'}`}>All Matches</button>
                     <button onClick={() => setActiveDetailTab('Invitations')} className={`flex-1 py-3.5 z-10 font-bold text-xs sm:text-sm transition-colors ${activeDetailTab === 'Invitations' ? 'text-[#343C44]' : 'text-[#8E8E8E]'}`}>Invitations sent</button>
                 </div>
-
                 {/* Candidates List */}
                 <div className="pb-20">
                     {activeDetailTab === 'Matches' ? (
@@ -342,44 +341,86 @@ const JobDetailPageCompany = () => {
                                 <span className="text-xl sm:text-2xl font-bold text-[#343C44]">{matchedTalents.length}</span>
                                 <span className="text-xl sm:text-2xl font-bold text-[#343C44]">candidates</span>
                             </div>
-                            <div className="space-y-6">
+
+                            {/* Grid: 850px dan tepada 2 ta, pastda 1 ta ustun */}
+                            <div className="grid grid-cols-1 min-[850px]:grid-cols-2 gap-6 sm:gap-8 w-full">
                                 {matchedTalents.map(talent => (
-                                    <div key={talent.id} className="bg-white border border-gray-100 rounded-[2rem] shadow-sm p-6 sm:p-8">
-                                        <div className="flex flex-col md:flex-row justify-between items-center md:items-start gap-4 mb-6">
-                                            <div className="flex flex-col md:flex-row items-center gap-4 sm:gap-6 text-center md:text-left">
-                                                <div className="w-20 h-20 shrink-0 rounded-full bg-[#E6E7E9] flex items-center justify-center overflow-hidden">
-                                                    {talent.image ? <img src={talent.image} className="w-full h-full object-cover grayscale" alt="" /> : <span className="text-xl font-bold">{getInitials(talent.first_name, talent.last_name)}</span>}
+                                    <div key={talent.id} className="bg-white border border-gray-100 rounded-[2rem] shadow-sm p-6 sm:p-7 flex flex-col justify-between hover:shadow-md transition-all min-h-[380px]">
+
+                                        {/* Yuqori qism: 650px breakpoint bilan boshqariladi */}
+                                        <div className="flex flex-col min-[650px]:flex-row justify-between items-center min-[650px]:items-start gap-5 mb-5">
+
+                                            {/* Profil rasm va Ma'lumotlar */}
+                                            <div className="flex flex-col min-[650px]:flex-row items-center gap-4 min-w-0 flex-1 w-full">
+                                                {/* Rasm: Kichik ekranda markazda bo'ladi */}
+                                                <div className="w-20 h-20 sm:w-22 sm:h-22 shrink-0 rounded-full bg-[#F3F4F6] flex items-center justify-center overflow-hidden border border-gray-100 shadow-inner">
+                                                    {talent.image ? (
+                                                        <img src={talent.image} className="w-full h-full object-cover" alt="" />
+                                                    ) : (
+                                                        <span className="text-2xl font-bold text-gray-400">{getInitials(talent.first_name, talent.last_name)}</span>
+                                                    )}
                                                 </div>
-                                                <div>
-                                                    <h2 className="text-xl sm:text-2xl font-bold text-[#3a3a3a]">{talent.specialty || "Specialist"}</h2>
-                                                    <p className="text-gray-500 font-medium">{talent.first_name} {talent.last_name}</p>
+
+                                                {/* Ism va Lavozim: Kichik ekranda markazga moslashadi */}
+                                                <div className="min-w-0 flex-1 text-center min-[650px]:text-left overflow-hidden w-full">
+                                                    <h2 className="text-[20px] sm:text-[22px] font-bold text-[#3a3a3a] truncate leading-tight mb-1" title={talent.specialty}>
+                                                        {talent.specialty || "Specialist"}
+                                                    </h2>
+                                                    <p className="text-gray-500 text-[16px] font-medium truncate">
+                                                        {talent.first_name} {talent.last_name}
+                                                    </p>
                                                 </div>
                                             </div>
-                                            <div className="text-center md:text-right">
-                                                <div className="flex items-center justify-center md:justify-end gap-1 text-gray-400 font-semibold mb-1"><HiOutlineLocationMarker size={20} /> {talent.city || "Uzbekistan"}</div>
-                                                <div className="text-xl sm:text-2xl font-bold text-[#4c4c4c]">{formatPrice(talent.minimum_salary)}</div>
+
+                                            {/* Narx va Joylashuv: Kichik ekranda markazda bo'ladi */}
+                                            <div className="text-center min-[650px]:text-right shrink-0 w-full min-[650px]:w-auto border-t min-[650px]:border-none pt-4 min-[650px]:pt-0">
+                                                <div className="text-[22px] sm:text-[24px] font-bold text-[#1D3D54] leading-tight">
+                                                    {formatPrice(talent.minimum_salary)}
+                                                </div>
+                                                <div className="flex items-center justify-center min-[650px]:justify-end gap-1 text-gray-400 text-[12px] font-bold uppercase mt-2">
+                                                    <HiOutlineLocationMarker size={16} />
+                                                    <span className="truncate max-w-[120px]">{talent.city || "UZB"}</span>
+                                                </div>
                                             </div>
                                         </div>
-                                        <div className="flex flex-col xl:flex-row justify-between items-center xl:items-end gap-6 border-t border-gray-50 pt-6">
-                                            <div className="w-full">
-                                                <h4 className="text-gray-400 text-[11px] font-bold uppercase mb-3 tracking-widest text-center md:text-left">Candidate skills:</h4>
-                                                <div className="flex flex-wrap justify-center md:justify-start gap-2">
-                                                    {parseTalentSkills(talent.skils).map((s, i) => (
-                                                        <span key={i} className="px-3 py-1 bg-[#f1f5f9] text-[#475569] text-xs font-semibold rounded-lg">{s.skill}</span>
-                                                    ))}
-                                                </div>
+
+                                        {/* Markaz: Skilllar */}
+                                        <div className="flex-1 my-5">
+                                            <h4 className="text-[12px] text-gray-400 font-bold uppercase tracking-wider mb-3 text-center min-[650px]:text-left">Skills:</h4>
+                                            <div className="flex flex-wrap justify-center min-[650px]:justify-start gap-2.5">
+                                                {parseTalentSkills(talent.skils).slice(0, 5).map((s, i) => (
+                                                    <span key={i} className="px-4 py-1.5 bg-[#f8fafc] text-[#64748b] text-[13px] font-semibold rounded-xl border border-gray-100">
+                                                        {s.skill}
+                                                    </span>
+                                                ))}
+                                                {parseTalentSkills(talent.skils).length > 5 && (
+                                                    <span className="text-[13px] text-gray-400 font-bold self-center ml-1">
+                                                        +{parseTalentSkills(talent.skils).length - 5}
+                                                    </span>
+                                                )}
                                             </div>
-                                            <div className="flex gap-3 shrink-0">
-                                                <Link to={`/talents/${talent.id}`} className="px-8 py-3 bg-[#1D3D54] text-white font-bold rounded-xl text-sm">View profile</Link>
-                                                <button className="px-6 py-3 border-2 border-[#1D3D54] text-[#1D3D54] font-bold rounded-xl text-sm">Send alert</button>
-                                            </div>
+                                        </div>
+
+                                        {/* Pastki qism: Tugmalar */}
+                                        <div className="flex flex-col sm:flex-row gap-4 pt-6 border-t border-gray-50">
+                                            <Link
+                                                to={`/talents/${talent.id}`}
+                                                className="flex-1 py-4 bg-[#1D3D54] text-white text-center font-bold rounded-2xl text-[14px] hover:bg-[#152e40] transition-colors shadow-sm active:scale-95"
+                                            >
+                                                View profile
+                                            </Link>
+                                            <button className="flex-1 py-4 border-2 border-[#1D3D54] text-[#1D3D54] font-bold rounded-2xl text-[14px] hover:bg-gray-50 transition-colors active:scale-95">
+                                                Send alert
+                                            </button>
                                         </div>
                                     </div>
                                 ))}
                             </div>
                         </>
                     ) : (
-                        <div className="text-center py-20 bg-white rounded-[2rem] border border-dashed text-gray-400">Yuborilgan taklifnomalar ro'yxati bo'sh.</div>
+                        <div className="text-center py-20 bg-white rounded-[2rem] border border-dashed text-gray-400">
+                            Yuborilgan taklifnomalar ro'yxati bo'sh.
+                        </div>
                     )}
                 </div>
             </div>
