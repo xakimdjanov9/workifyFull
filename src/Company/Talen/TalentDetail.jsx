@@ -9,28 +9,102 @@ const TalentDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [talent, setTalent] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchTalentDetail = async () => {
+      setIsLoading(true);
       try {
         const res = await talenApi.getById(id);
         const data = res.data?.data || res.data;
         setTalent(data);
       } catch (err) {
         console.error("Xatolik:", err);
+      } finally {
+        // Ma'lumot tez kelgan taqdirda ham skeleton effektini biroz ko'rsatish
+        setTimeout(() => setIsLoading(false), 500);
       }
     };
     if (id) fetchTalentDetail();
   }, [id]);
 
-  if (!talent) return null;
+  const defaultAvatar =
+    "https://media.istockphoto.com/id/1337144146/vector/default-avatar-profile-icon-vector.jpg?s=612x612&w=0&k=20&c=BIbFwuv7FxTWvh5S3vB6bkT0Qv8Vn8N5Ffseq84ClGI=";
+
+  // SKELETON LOADING COMPONENT
+  const DetailSkeleton = () => (
+    <div className="max-w-[1100px] mx-auto px-6 mt-8 animate-pulse">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div className="lg:col-span-2 space-y-8">
+          <div className="bg-white rounded-[32px] p-8 border border-gray-100 shadow-sm">
+            <div className="flex flex-col md:flex-row gap-8 items-start">
+              <div className="w-32 h-32 md:w-40 md:h-40 rounded-[28px] bg-gray-200" />
+              <div className="flex-1 space-y-4">
+                <div className="h-8 bg-gray-200 rounded-md w-1/2" />
+                <div className="h-4 bg-gray-200 rounded-md w-1/3" />
+                <div className="flex gap-4 mt-6">
+                  <div className="h-10 bg-gray-100 rounded-lg w-24" />
+                  <div className="h-10 bg-gray-100 rounded-lg w-24" />
+                </div>
+              </div>
+            </div>
+            <div className="mt-10 pt-8 border-t border-gray-50">
+              <div className="h-6 bg-gray-200 rounded w-1/4 mb-4" />
+              <div className="flex flex-wrap gap-2">
+                {[1, 2, 3, 4, 5].map((i) => (
+                  <div key={i} className="h-9 w-20 bg-gray-100 rounded-full" />
+                ))}
+              </div>
+            </div>
+          </div>
+          <div className="bg-white rounded-[32px] p-8 border border-gray-100 shadow-sm">
+            <div className="h-6 bg-gray-200 rounded w-1/4 mb-4" />
+            <div className="space-y-3">
+              <div className="h-4 bg-gray-100 rounded w-full" />
+              <div className="h-4 bg-gray-100 rounded w-5/6" />
+              <div className="h-4 bg-gray-100 rounded w-4/6" />
+            </div>
+          </div>
+        </div>
+        <div className="lg:col-span-1">
+          <div className="bg-white rounded-[32px] p-8 border border-gray-100 shadow-sm space-y-6">
+            <div className="space-y-2">
+              <div className="h-4 bg-gray-200 rounded w-1/2" />
+              <div className="h-10 bg-gray-200 rounded w-3/4" />
+            </div>
+            <div className="space-y-4">
+              <div className="h-10 bg-gray-100 rounded w-full" />
+              <div className="h-10 bg-gray-100 rounded w-full" />
+            </div>
+            <div className="h-14 bg-gray-200 rounded-2xl w-full" />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-[#FDFEFF] pb-20">
+        <div className="max-w-[1100px] mx-auto px-6 pt-8">
+          <div className="h-6 w-32 bg-gray-100 rounded" />
+        </div>
+        <DetailSkeleton />
+      </div>
+    );
+  }
+
+  if (!talent) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <p className="text-gray-500 font-bold">Talent not found.</p>
+      </div>
+    );
+  }
 
   const skillsArray = Array.isArray(talent.skills)
     ? talent.skills
     : JSON.parse(talent.skils || "[]");
-
-  const defaultAvatar =
-    "https://media.istockphoto.com/id/1337144146/vector/default-avatar-profile-icon-vector.jpg?s=612x612&w=0&k=20&c=BIbFwuv7FxTWvh5S3vB6bkT0Qv8Vn8N5Ffseq84ClGI=";
 
   return (
     <div className="min-h-screen bg-[#FDFEFF] font-gilroy text-[#1A1C21] pb-20">
