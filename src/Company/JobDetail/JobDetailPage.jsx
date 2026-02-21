@@ -323,10 +323,22 @@ const JobDetailPageCompany = () => {
                 </div>
 
                 {/* Back Button */}
-                <button onClick={() => navigate('/company/my-jobs')} className="group flex items-center justify-center md:justify-start gap-2 text-[#1D3D54] font-bold mb-10 py-2 px-4 rounded-lg transition-all hover:bg-[#1D3D54]/5 w-full md:w-auto">
-                    <MdKeyboardArrowLeft size={24} /> <span>Back to my jobs</span>
+                <button
+                    onClick={() => navigate('/company/my-jobs')}
+                    className="group flex items-center justify-center gap-3 text-[#1D3D54] font-bold mb-10 
+               /* O'lcham: Width 200px qilib belgilandi */
+               w-[200px] h-[60px] 
+               /* Border va Stil */
+               border-2 border-[#1D3D54] rounded-2xl bg-white shadow-sm
+               /* Hover effektlari (aslicha qoldi) */
+               transition-all duration-300 hover:bg-[#1D3D54] hover:text-white hover:shadow-lg active:scale-95"
+                >
+                    <MdKeyboardArrowLeft
+                        size={28}
+                        className="transition-transform duration-300 group-hover:-translate-x-2"
+                    />
+                    <span className="text-[18px]">Back to My jobs</span>
                 </button>
-
                 {/* Tabs */}
                 <div className="flex bg-[#E9E9E9] p-1.5 rounded-[1.5rem] w-full relative mb-10 overflow-hidden">
                     <div className={`absolute top-1.5 bottom-1.5 w-[calc(50%-6px)] bg-white rounded-[1.2rem] shadow-sm transition-all duration-300 ${activeDetailTab === 'Matches' ? 'left-1.5' : 'left-[calc(50%+3px)]'}`} />
