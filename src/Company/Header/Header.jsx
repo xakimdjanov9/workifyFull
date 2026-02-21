@@ -128,7 +128,7 @@ function Header() {
         <div className="w-full md:w-[90%] max-w-[1300px] flex items-center justify-between h-full relative">
 
           {/* LOGO */}
-          <Link to="/" className="text-[#343C44] font-semibold text-[26px] lg:text-[32px] font-['Mulish'] tracking-tight shrink-0">
+          <Link to="/" className="text-[#343C44] font-[600] text-[26px] lg:text-[34px] font-sans tracking-tight shrink-0">
             workify
           </Link>
 
